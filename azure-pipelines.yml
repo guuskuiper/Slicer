@@ -30,8 +30,9 @@ steps:
   displayName: 'dotnet test'
   inputs:
     command: 'test'
-    arguments: '-c $(buildConfiguration) --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    arguments: '-c $(buildConfiguration) --no-build -v n --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\'
     publishTestResults: true
+    projects: 'SlicerTests'
     
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
