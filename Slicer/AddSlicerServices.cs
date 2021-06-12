@@ -10,6 +10,7 @@ using Slicer.Slicer.Fill;
 using Slicer.Slicer.Input;
 using Slicer.Slicer.Output;
 using Slicer.Slicer.Slice;
+using Slicer.Slicer.Sort;
 using Slicer.Utils;
 
 namespace Slicer
@@ -22,6 +23,7 @@ namespace Slicer
             services.AddTransient<IFileIO, FileIO>();
             services.AddTransient<ILayers, Layers>();
             services.AddTransient<IFiller, Filler>();
+            services.AddTransient<ISort, Sort>();
             services.AddSingleton<Project>();
             services.AddTransient<IGcode, Gcode>();
             services.AddTransient<IConcentric, Concentric>();

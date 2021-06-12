@@ -28,8 +28,7 @@ namespace Slicer.Utils
             //var partitionerRange = Partitioner.Create(0, items.Count());
             Partitioner<T> partitioner = Partitioner.Create(items);
             //ThreadPool.GetMaxThreads(out int workerThreads, out int ioThreads);
-            var partitions = partitioner.GetPartitions(Environment.ProcessorCount);
-                
+            //var partitions = partitioner.GetPartitions(Environment.ProcessorCount);
 
             Parallel.ForEach(partitioner, (item, state) =>
             {
@@ -38,7 +37,21 @@ namespace Slicer.Utils
                 TS service = scope.ServiceProvider.GetRequiredService<TS>();
                 action(item, service);
             });
+        }
 
+        public IEnumerable<TR> Parallelize<T, TS, TR>(IEnumerable<T> items, Func<T, TS, TR> func)
+        {
+            List<TR> results = new List<TR>();
+            Partitioner<T> partitioner = Partitioner.Create(items);
+            Parallel.ForEach(partitioner, (item, state) =>
+            {
+                using var scope = _scopeFactory.CreateScope();
+                _logger.Debug("Created scope {0} on thread {1} for {2}", scope.GetHashCode(), Thread.CurrentThread.ManagedThreadId, item);
+                TS service = scope.ServiceProvider.GetRequiredService<TS>();
+                results.Add(func(item, service));
+            });
+
+            return results;
         }
     }
 }

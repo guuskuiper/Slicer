@@ -21,9 +21,9 @@ namespace Slicer.Slicer.Output
             _project = project;
         }
 
-        public string Create(List<Layer> layers)
+        public string Create(IOrderedEnumerable<SortedLayer> layers)
         {
-            foreach (Layer layer in layers)
+            foreach (SortedLayer layer in layers)
             {
                 CreateLayer(layer);
             }
@@ -31,7 +31,7 @@ namespace Slicer.Slicer.Output
             return sb.ToString();
         }
 
-        private void CreateLayer(Layer layer)
+        private void CreateLayer(SortedLayer layer)
         {
             TravelZ(layer.Height, _project.setting.TravelSpeed);
             foreach (var path in layer.Paths.Polys)
