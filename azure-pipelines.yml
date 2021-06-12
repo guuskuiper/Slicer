@@ -27,7 +27,7 @@ steps:
     arguments: '-c $(buildConfiguration)'       
 
 - task: DotNetCoreCLI@2
-   displayName: 'dotnet test'
+  displayName: 'dotnet test'
   inputs:
     command: 'test'
     arguments: '-c $(buildConfiguration) --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
