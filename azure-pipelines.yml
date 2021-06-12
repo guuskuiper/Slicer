@@ -30,7 +30,7 @@ steps:
   displayName: 'dotnet test'
   inputs:
     command: 'test'
-    arguments: '-c $(buildConfiguration) --no-build -v n --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\TestResults\Coverage\'
+    arguments: '-c $(buildConfiguration) --no-build -v n --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Agent.TempDirectory)\TestResults\Coverage\'
     publishTestResults: true
     projects: 'SlicerTests'
     
@@ -38,4 +38,4 @@ steps:
   displayName: 'Publish code coverage report'
   inputs:
     codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
