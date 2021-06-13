@@ -24,13 +24,13 @@ steps:
   displayName: 'dotnet build'
   inputs:
     command: 'build'
-    arguments: '-c $(buildConfiguration)'       
+    arguments: '-c $(buildConfiguration) --no-restore'       
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
   inputs:
     command: 'test'
-    arguments: '-c $(buildConfiguration) --no-build -v n --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Agent.TempDirectory)\TestResults\Coverage\'
+    arguments: '-c $(buildConfiguration) --no-build --verbosity normal --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Agent.TempDirectory)\TestResults\Coverage\'
     publishTestResults: true
     projects: 'SlicerTests'
     
