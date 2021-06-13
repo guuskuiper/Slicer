@@ -28,9 +28,8 @@ namespace Slicer.Services
         private readonly IGcode  _gcode;
         private readonly STLConverter _stlConverter;
         private readonly IParallelScope _parallelScope;
-        private readonly ValidateAll _validator;
 
-        public SliceService(ILogger logger, IFileIO fileIO, ILayers layers, IFiller filler, Project project, IGcode gcode, STLConverter stlConverter, IParallelScope parallelScope, ISort sort, ValidateAll validator)
+        public SliceService(ILogger logger, IFileIO fileIO, ILayers layers, IFiller filler, Project project, IGcode gcode, STLConverter stlConverter, IParallelScope parallelScope, ISort sort)
         {
             _logger = logger;
             _fileIO = fileIO;
@@ -41,19 +40,10 @@ namespace Slicer.Services
             _stlConverter = stlConverter;
             _parallelScope = parallelScope;
             _sort = sort;
-            _validator = validator;
         }
 
         public async Task<string> Slice(SlicerServiceOptions options)
         {
-            /* validation */
-            var validatorResult = _validator.Validate(options);
-            if (!string.IsNullOrEmpty(validatorResult))
-            {
-                _logger.Error(validatorResult);
-                return validatorResult;
-            }
-
             _logger.Information($"Started slicing {options.InputFilePath}");
 
             /* read input */

@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SlicerMediatR\SlicerMediatR.csproj" />
     <ProjectReference Include="..\Slicer\Slicer.csproj" />
   </ItemGroup>
 

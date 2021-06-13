@@ -9,7 +9,7 @@ namespace Slicer.Validators
     {
         public ProjectValidator()
         {
-            RuleFor(x => x.setting).SetValidator(new SettingsValidator());
+            RuleFor(x => x.Settings).SetValidator(new SettingsValidator());
         }
     }
 }

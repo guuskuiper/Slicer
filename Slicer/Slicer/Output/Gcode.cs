@@ -36,7 +36,7 @@ namespace Slicer.Slicer.Output
 
         private void CreateLayer(SortedLayer layer)
         {
-            TravelZ(layer.Height, _project.setting.TravelSpeed);
+            TravelZ(layer.Height, _project.Settings.TravelSpeed);
             foreach (var path in layer.Paths)
             {
                 PrintPath(path, layer.Thickness);
@@ -69,14 +69,14 @@ namespace Slicer.Slicer.Output
 
             if (_state.Pt != nextPt)
             {
-                TravelXY(nextPt, _project.setting.TravelSpeed);
+                TravelXY(nextPt, _project.Settings.TravelSpeed);
             }
 
             foreach (IntPoint pt in path.Skip(1))
             {
-                var e = CalcVolume(_state.Pt, pt, thickness, _project.setting.LineWidth / 1000.0);
+                var e = CalcVolume(_state.Pt, pt, thickness, _project.Settings.LineWidth / 1000.0);
 
-                Extruder(pt, e, _project.setting.PrintSpeed);
+                Extruder(pt, e, _project.Settings.PrintSpeed);
             }
         }
 

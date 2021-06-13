@@ -1,10 +1,10 @@
-﻿using ClipperLib;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Slicer;
+using SlicerMediatR;
 
 namespace ConsoleSlicerDI
 {
@@ -32,6 +32,7 @@ namespace ConsoleSlicerDI
         {
             services.AddTransient<SlicerApplication>();
             services.AddSlicerServices(configuration);
+            services.AddMediatRServices(configuration);
             services.AddSerilogServices(configuration);
         }
 

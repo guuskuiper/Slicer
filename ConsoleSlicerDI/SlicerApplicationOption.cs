@@ -12,5 +12,8 @@ namespace ConsoleSlicerDI
 
         [Option('p', "parallel", Required = false, HelpText = "Slice in parallel.")]
         public bool Parallel { get; init; } = true;
+
+        [Option('m', "mediatr", Required = false, HelpText = "Use mediatR.")]
+        public bool MediatR { get; init; } = false;
     }
 }
