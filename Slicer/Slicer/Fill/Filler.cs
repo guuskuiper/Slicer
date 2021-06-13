@@ -17,12 +17,12 @@ namespace Slicer.Slicer.Fill
 
         public void Fill(Layer layer)
         {
-            layer.Paths.AddRange(_concentric.ConcentricFill(layer.Contour, _project.setting.LineWidth));
+            layer.Paths.AddRange(_concentric.ConcentricFill(layer.Contour, _project.Settings.LineWidth));
         }
 
         public void FillOutside(Layer layer)
         {
-            layer.Paths.AddRange(_concentric.ConcentricOutside(layer.Contour, _project.setting.LineWidth, _project.setting.BrimCount));
+            layer.Paths.AddRange(_concentric.ConcentricOutside(layer.Contour, _project.Settings.LineWidth, _project.Settings.BrimCount));
         }
     }
 }

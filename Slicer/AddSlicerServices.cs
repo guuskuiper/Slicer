@@ -1,9 +1,11 @@
 ﻿// unset
 
 using ClipperLib;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Slicer.Models;
+using Slicer.Options;
 using Slicer.Services;
 using Slicer.Slicer.Clipper;
 using Slicer.Slicer.Fill;
@@ -12,6 +14,8 @@ using Slicer.Slicer.Output;
 using Slicer.Slicer.Slice;
 using Slicer.Slicer.Sort;
 using Slicer.Utils;
+using Slicer.Validators;
+using System;
 
 namespace Slicer
 {
@@ -37,6 +41,8 @@ namespace Slicer
             services.AddTransient<Intersection>();
             services.AddTransient<IParallelScope, ParallelScopeLocal>();
             services.AddTransient<ISliceLayer, SliceLayer>();
+            services.AddTransient<ValidateAll>();
+            services.AddValidatorsFromAssembly(typeof(SlicerServices).Assembly, ServiceLifetime.Transient);
             return services;
         }
     }

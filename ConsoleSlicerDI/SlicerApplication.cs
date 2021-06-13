@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CommandLine;
+using Slicer.Options;
 using Slicer.Services;
 
 namespace ConsoleSlicerDI
@@ -19,7 +20,12 @@ namespace ConsoleSlicerDI
                 .ParseArguments<SlicerApplicationOption>(args)
                 .WithParsedAsync(
                     async option => 
-                        await _sliceService.Slice(option.Infile, option.Outfile, option.Parallel));
+                        await _sliceService.Slice(new SlicerServiceOptions()
+                        {
+                            InputFilePath = option.Infile,
+                            OutputFilePath = option.Outfile,
+                            Parallel = option.Parallel
+                        }));
         }
     }
 }

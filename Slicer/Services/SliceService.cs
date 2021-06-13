@@ -1,12 +1,15 @@
 ﻿using ClipperLib;
+using FluentValidation;
 using Serilog;
 using Slicer.Models;
+using Slicer.Options;
 using Slicer.Slicer.Fill;
 using Slicer.Slicer.Input;
 using Slicer.Slicer.Output;
 using Slicer.Slicer.Slice;
 using Slicer.Slicer.Sort;
 using Slicer.Utils;
+using Slicer.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +28,9 @@ namespace Slicer.Services
         private readonly IGcode  _gcode;
         private readonly STLConverter _stlConverter;
         private readonly IParallelScope _parallelScope;
+        private readonly ValidateAll _validator;
 
-        public SliceService(ILogger logger, IFileIO fileIO, ILayers layers, IFiller filler, Project project, IGcode gcode, STLConverter stlConverter, IParallelScope parallelScope, ISort sort)
+        public SliceService(ILogger logger, IFileIO fileIO, ILayers layers, IFiller filler, Project project, IGcode gcode, STLConverter stlConverter, IParallelScope parallelScope, ISort sort, ValidateAll validator)
         {
             _logger = logger;
             _fileIO = fileIO;
@@ -37,31 +41,42 @@ namespace Slicer.Services
             _stlConverter = stlConverter;
             _parallelScope = parallelScope;
             _sort = sort;
+            _validator = validator;
         }
 
-        public async Task Slice(string inputFilePath, string outputFilePath, bool parallel = true)
+        public async Task<string> Slice(SlicerServiceOptions options)
         {
-            _logger.Information($"Started slicing {inputFilePath}");
+            /* validation */
+            var validatorResult = _validator.Validate(options);
+            if (!string.IsNullOrEmpty(validatorResult))
+            {
+                _logger.Error(validatorResult);
+                return validatorResult;
+            }
+
+            _logger.Information($"Started slicing {options.InputFilePath}");
 
             /* read input */
-            var stl = _stlConverter.Read(inputFilePath);
+            var stl = _stlConverter.Read(options.InputFilePath);
 
             /* create layers */
-            var layers = _layers.CreateLayers(stl, parallel);
+            var layers = _layers.CreateLayers(stl, options.Parallel);
 
             /* fill layers */
-            Fill(layers, parallel);
+            Fill(layers, options.Parallel);
 
             /* add buildplate adhesion */
             _filler.FillOutside(layers[0]);
 
             /* sort */
-            var sortedLayers = Sort(layers, parallel);
+            var sortedLayers = Sort(layers, options.Parallel);
 
             /* convert to output and save */
-            await Output(outputFilePath, sortedLayers);
+            await Output(options.OutputFilePath, sortedLayers);
 
-            _logger.Information($"Save Gcode to {outputFilePath}");
+            _logger.Information($"Save Gcode to {options.OutputFilePath}");
+
+            return "";
         }
 
         private async Task Output(string outputFilePath, IOrderedEnumerable<SortedLayer> layers)

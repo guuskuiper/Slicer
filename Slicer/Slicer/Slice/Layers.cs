@@ -44,17 +44,17 @@ namespace Slicer.Slicer.Slice
             var maxZ = GetMaxZ(stl);
             var layers = new List<Layer>();
 
-            float h = _project.setting.LayerHeight;
+            float h = _project.Settings.LayerHeight;
 
             while (h < maxZ)
             {
                 layers.Add(new Layer
                 {
                     Height = h,
-                    Thickness = _project.setting.LayerHeight
+                    Thickness = _project.Settings.LayerHeight
                 });
 
-                h += _project.setting.LayerHeight;
+                h += _project.Settings.LayerHeight;
             }
 
             return layers;
