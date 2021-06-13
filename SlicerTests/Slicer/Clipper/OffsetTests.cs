@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Slicer.Models;
 using Slicer.Slicer.Clipper;
+using Slicer.Slicer.PolygonOperations;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -22,7 +23,7 @@ namespace SlicerTests.Slicer.Clipper
         public void ListIntPointOffset_ShouldAddNegativeOffset()
         {
             // Arrange
-            List<IntPoint> poly = SquarePoly(10_000);
+            List<IntPoint> poly = CreatePolygon.SquarePoly(10_000);
 
             // Act
             var offsetPolys = _offset.PolyOffset(poly, -1_000);
@@ -37,7 +38,7 @@ namespace SlicerTests.Slicer.Clipper
         public void ListIntPointOffset_ShouldAddPositiveOffset()
         {
             // Arrange
-            var poly = SquarePoly(10_000);
+            var poly = CreatePolygon.SquarePoly(10_000);
 
             // Act
             var offsetPolys = _offset.PolyOffset(poly, 1_000);
@@ -52,7 +53,7 @@ namespace SlicerTests.Slicer.Clipper
         public void PolyOffset_ShouldAddPositiveOffset()
         {
             // Arrange
-            var poly = new Polygon(SquarePoly(10_000));
+            var poly = new Polygon(CreatePolygon.SquarePoly(10_000));
 
             // Act
             var offsetPolys = _offset.PolyOffset(poly, 1_000);
@@ -67,7 +68,7 @@ namespace SlicerTests.Slicer.Clipper
         public void PolyOffsets_ShouldAddPositiveOffset()
         {
             // Arrange
-            var polys = new Polygons(new Polygon(SquarePoly(10_000)));
+            var polys = new Polygons(new Polygon(CreatePolygon.SquarePoly(10_000)));
 
             // Act
             var offsetPolys = _offset.PolyOffset(polys, 1_000);
@@ -84,8 +85,8 @@ namespace SlicerTests.Slicer.Clipper
             // Arrange
             var polys = new Polygons(new List<List<IntPoint>>()
             {
-                RectPoly(4_000, 10_000, -3_000),
-                RectPoly(4_000, 10_000, +3_000),
+                CreatePolygon.RectPoly(4_000, 10_000, new IntPoint(-3_000, 0)),
+                CreatePolygon.RectPoly(4_000, 10_000, new IntPoint(+3_000, 0)),
             });
 
             // Act
@@ -95,31 +96,6 @@ namespace SlicerTests.Slicer.Clipper
             offsetPolys.Polys.Should().ContainSingle()
                 .Which.Poly.Should().HaveCount(4)
                 .And.OnlyContain(p => Math.Abs(p.X) == 6_000 && Math.Abs(p.Y) == 6_000);
-        }
-
-        private static List<IntPoint> SquarePoly(long size)
-        {
-            long halfSize = size / 2;
-            var poly = new List<IntPoint>()
-            {
-                new(halfSize, halfSize),
-                new(-halfSize, halfSize),
-                new(-halfSize, -halfSize),
-                new(halfSize, -halfSize),
-            };
-            return poly;
-        }
-
-        private static List<IntPoint> RectPoly(long width, long height, long cX = 0, long cY = 0)
-        {
-            var poly = new List<IntPoint>()
-            {
-                new(cX + width / 2, cY + height / 2),
-                new(cX - width / 2, cY + height / 2),
-                new(cX - width / 2, cY - height / 2),
-                new(cX + width / 2, cY - height / 2),
-            };
-            return poly;
         }
     }
 
