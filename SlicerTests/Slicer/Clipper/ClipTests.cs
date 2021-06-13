@@ -1,16 +1,12 @@
 ﻿using ClipperLib;
 using FluentAssertions;
 using Slicer.Models;
-using Xunit;
 using Slicer.Slicer.Clipper;
 using Slicer.Slicer.PolygonOperations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
-namespace Slicer.Slicer.Clipper.Tests
+namespace SlicerTests.Slicer.Clipper
 {
     public class ClipTests
     {
@@ -19,18 +15,18 @@ namespace Slicer.Slicer.Clipper.Tests
         {
             // Arrange
             IClip clipper = new Clip(new ClipperLib.Clipper());
-            Polygon subject = new Polygon(CreatePolygon.SquarePoly(10_000));
-            Polygon clip = new Polygon(CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000)));
+            Polygon subject = CreatePolygon.SquarePoly(10_000);
+            Polygon clip = CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000));
 
-            Polygon expected = new Polygon(CreatePolygon.RectPoly(10_000, 5_000, new IntPoint(0, 5_000 / 2)));
+            Polygon expected = CreatePolygon.RectPoly(10_000, 5_000, new IntPoint(0, 5_000 / 2));
 
             // Act
             var result = clipper.Difference(new Polygons(subject), new Polygons(clip));
 
             // Assert 
-            result.Polys.Should().ContainSingle()
-                .Which.Poly.Should().HaveCount(4)
-                .And.BeEquivalentTo(expected.Poly);
+            result.Should().ContainSingle()
+                .Which.Should().HaveCount(4)
+                .And.BeEquivalentTo(expected);
         }
 
         [Fact()]
@@ -38,8 +34,8 @@ namespace Slicer.Slicer.Clipper.Tests
         {
             // Arrange
             IClip clipper = new Clip(new ClipperLib.Clipper());
-            Polygon subject = new Polygon(new List<IntPoint> { new (5_000, 0), new (-5_000, 0) });
-            Polygon clip = new Polygon(CreatePolygon.RectPoly(2_000, 10_000));
+            Polygon subject = new Polygon(new IntPoint(5_000, 0), new IntPoint(-5_000, 0));
+            Polygon clip = CreatePolygon.RectPoly(2_000, 10_000);
 
             var expected =new List<List<IntPoint>>
             {
@@ -51,7 +47,7 @@ namespace Slicer.Slicer.Clipper.Tests
             var result = clipper.DifferenceOpen(new Polygons(subject), new Polygons(clip));
 
             // Assert 
-            result.GetPolys().Should().HaveCount(2)
+            result.Should().HaveCount(2)
                 .And.BeEquivalentTo(expected);
         }
 
@@ -60,18 +56,18 @@ namespace Slicer.Slicer.Clipper.Tests
         {
             // Arrange
             IClip clipper = new Clip(new ClipperLib.Clipper());
-            Polygon subject = new Polygon(CreatePolygon.SquarePoly(10_000));
-            Polygon clip = new Polygon(CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000)));
+            Polygon subject = CreatePolygon.SquarePoly(10_000);
+            Polygon clip = CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000));
 
-            Polygon expected = new Polygon(CreatePolygon.RectPoly(10_000, 15_000, new IntPoint(0, -2_500)));
+            Polygon expected = CreatePolygon.RectPoly(10_000, 15_000, new IntPoint(0, -2_500));
 
             // Act
             var result = clipper.Union(new Polygons(subject), new Polygons(clip));
 
             // Assert 
-            result.Polys.Should().ContainSingle()
-                .Which.Poly.Should().HaveCount(4)
-                .And.BeEquivalentTo(expected.Poly);
+            result.Should().ContainSingle()
+                .Which.Should().HaveCount(4)
+                .And.BeEquivalentTo(expected);
         }
 
         [Fact()]
@@ -79,8 +75,8 @@ namespace Slicer.Slicer.Clipper.Tests
         {
             // Arrange
             IClip clipper = new Clip(new ClipperLib.Clipper());
-            Polygon subject = new Polygon(new List<IntPoint> { new(5_000, 0), new(-5_000, 0) });
-            Polygon clip = new Polygon(CreatePolygon.RectPoly(2_000, 10_000));
+            Polygon subject = new Polygon(new(5_000, 0), new(-5_000, 0));
+            Polygon clip = CreatePolygon.RectPoly(2_000, 10_000);
 
             var expectedOpen = new List<List<IntPoint>>
             {
@@ -88,17 +84,17 @@ namespace Slicer.Slicer.Clipper.Tests
                 new List<IntPoint>() { new(-5_000, 0), new(-1_000, 0) },
             };
 
-            Polygon expectedClosed = new Polygon(CreatePolygon.RectPoly(2_000, 10_000));
+            Polygon expectedClosed = CreatePolygon.RectPoly(2_000, 10_000);
 
             // Act
             var result = clipper.UnionOpen(new Polygons(subject), new Polygons(clip));
 
             // Assert 
-            result.open.GetPolys().Should().HaveCount(2)
+            result.open.Should().HaveCount(2)
                 .And.BeEquivalentTo(expectedOpen);
-            result.closed.Polys.Should().ContainSingle()
-                .Which.Poly.Should().HaveCount(4)
-                .And.BeEquivalentTo(expectedClosed.Poly);
+            result.closed.Should().ContainSingle()
+                .Which.Should().HaveCount(4)
+                .And.BeEquivalentTo(expectedClosed);
         }
 
         [Fact()]
@@ -106,18 +102,18 @@ namespace Slicer.Slicer.Clipper.Tests
         {
             // Arrange
             IClip clipper = new Clip(new ClipperLib.Clipper());
-            Polygon subject = new Polygon(CreatePolygon.SquarePoly(10_000));
-            Polygon clip = new Polygon(CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000)));
+            Polygon subject = CreatePolygon.SquarePoly(10_000);
+            Polygon clip = CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000));
 
-            Polygon expected = new Polygon(CreatePolygon.RectPoly(10_000, 5_000, new IntPoint(0, -2_500)));
+            Polygon expected = CreatePolygon.RectPoly(10_000, 5_000, new IntPoint(0, -2_500));
 
             // Act
             var result = clipper.Intersection(new Polygons(subject), new Polygons(clip));
 
             // Assert 
-            result.Polys.Should().ContainSingle()
-                .Which.Poly.Should().HaveCount(4)
-                .And.BeEquivalentTo(expected.Poly);
+            result.Should().ContainSingle()
+                .Which.Should().HaveCount(4)
+                .And.BeEquivalentTo(expected);
         }
 
         [Fact()]
@@ -125,8 +121,8 @@ namespace Slicer.Slicer.Clipper.Tests
         {
             // Arrange
             IClip clipper = new Clip(new ClipperLib.Clipper());
-            Polygon subject = new Polygon(new List<IntPoint> { new(5_000, 0), new(-5_000, 0) });
-            Polygon clip = new Polygon(CreatePolygon.RectPoly(2_000, 10_000));
+            Polygon subject = new Polygon(new(5_000, 0), new(-5_000, 0));
+            Polygon clip = CreatePolygon.RectPoly(2_000, 10_000);
 
             var expected = new List<List<IntPoint>>
             {
@@ -137,7 +133,7 @@ namespace Slicer.Slicer.Clipper.Tests
             var result = clipper.IntersectionOpen(new Polygons(subject), new Polygons(clip));
 
             // Assert 
-            result.GetPolys().Should().ContainSingle()
+            result.Should().ContainSingle()
                 .And.BeEquivalentTo(expected);
         }
 
@@ -146,8 +142,8 @@ namespace Slicer.Slicer.Clipper.Tests
         {
             // Arrange
             IClip clipper = new Clip(new ClipperLib.Clipper());
-            Polygon subject = new Polygon(CreatePolygon.SquarePoly(10_000));
-            Polygon clip = new Polygon(CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000)));
+            Polygon subject = CreatePolygon.SquarePoly(10_000);
+            Polygon clip = CreatePolygon.RectPoly(10_000, 10_000, new IntPoint(0, -5_000));
 
             var expected = new List<List<IntPoint>>
             {
@@ -158,7 +154,7 @@ namespace Slicer.Slicer.Clipper.Tests
             var result = clipper.Xor(new Polygons(subject), new Polygons(clip));
 
             // Assert 
-            result.GetPolys().Should().HaveCount(2)
+            result.Should().HaveCount(2)
                 .And.BeEquivalentTo(expected);
         }
     }

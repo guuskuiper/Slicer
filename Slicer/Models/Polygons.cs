@@ -6,69 +6,43 @@ using System.Text;
 
 namespace Slicer.Models
 {
-    public class Polygons
+    public class Polygons : List<Polygon>
     {
-        public List<Polygon> Polys { get; set; }
-
-        public int Count => Polys.Count;
-
         public Polygons()
         {
-            Polys = new List<Polygon>();
         }
 
-        public Polygons(IEnumerable<Polygon> polys)
+        public Polygons(IEnumerable<Polygon> polys) : base(polys)
         {
-            Polys = new List<Polygon>(polys);
         }
 
-        public Polygons(Polygon poly)
+        public Polygons(params Polygon[] polys) : base(polys)
         {
-            Polys = new List<Polygon> {poly};
         }
 
-        public Polygons(int capacity)
+        public Polygons(int capacity) : base(capacity)
         {
-            Polys = new List<Polygon>(capacity);
         }
 
         public Polygons(IEnumerable<IEnumerable<IntPoint>> polys)
         {
-            Polys = new List<Polygon>();
-            foreach (IEnumerable<IntPoint> poly in polys)
-            {
-                Polys.Add(new Polygon(poly));
-            }
+            this.AddRange(polys.Select(x => new Polygon(x)));
         }
 
-        public Polygons(List<List<IntPoint>> polys)
+        public Polygons(List<List<IntPoint>> polys) : base(polys.Count)
         {
-            Polys = new List<Polygon>(polys.Count);
-            foreach (List<IntPoint> poly in polys)
-            {
-                Polys.Add(new Polygon(poly));
-            }
+            this.AddRange(polys.Select(x => new Polygon(x)));
         }
 
-        public void Add(Polygon poly)
+        public List<List<IntPoint>> GetPolysCopy()
         {
-            Polys.Add(poly);
-        }
-
-        public void AddRange(Polygons polys)
-        {
-            Polys.AddRange(polys.Polys);
-        }
-
-        public List<List<IntPoint>> GetPolys()
-        {
-            return Polys.Select(x => x.Poly).ToList();
+            return this.Select(x => x.ToList()).ToList();
         }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (Polygon polygon in Polys)
+            foreach (Polygon polygon in this)
             {
                 sb.AppendLine(polygon.ToString());
             }
@@ -77,7 +51,7 @@ namespace Slicer.Models
 
         public void Close()
         {
-            foreach (Polygon poly in Polys)
+            foreach (Polygon poly in this)
             {
                 poly.Close();
             }

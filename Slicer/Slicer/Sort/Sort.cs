@@ -12,10 +12,10 @@ namespace Slicer.Slicer.Sort
             var sortedLayer = new SortedLayer {Height = layer.Height, Thickness = layer.Thickness};
 
             IntPoint curPoint = prevPt;
-            foreach (var path in layer.Paths.Polys)
+            foreach (var path in layer.Paths)
             {
                 sortedLayer.Paths.Add(path);
-                curPoint = path.Poly[^1];
+                curPoint = path[^1];
             }
 
             return (sortedLayer, curPoint);

@@ -104,9 +104,9 @@ namespace Slicer.Slicer.Clipper
 
         private void AddPolys(Polygons polys, PolyType polyType, bool closed = true)
         {
-            foreach (var poly in polys.Polys)
+            foreach (var poly in polys)
             {
-                _clipper.AddPath(poly.Poly, polyType, closed);
+                _clipper.AddPath(poly, polyType, closed);
             }
         }
     }

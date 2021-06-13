@@ -53,14 +53,14 @@ namespace SlicerTests.Slicer.Clipper
         public void PolyOffset_ShouldAddPositiveOffset()
         {
             // Arrange
-            var poly = new Polygon(CreatePolygon.SquarePoly(10_000));
+            var poly = CreatePolygon.SquarePoly(10_000);
 
             // Act
             var offsetPolys = _offset.PolyOffset(poly, 1_000);
 
             // Assert
-            offsetPolys.Polys.Should().ContainSingle()
-                .Which.Poly.Should().HaveCount(4)
+            offsetPolys.Should().ContainSingle()
+                .Which.Should().HaveCount(4)
                 .And.OnlyContain(p => Math.Abs(p.X) == 6_000 && Math.Abs(p.Y) == 6_000);
         }
 
@@ -68,14 +68,14 @@ namespace SlicerTests.Slicer.Clipper
         public void PolyOffsets_ShouldAddPositiveOffset()
         {
             // Arrange
-            var polys = new Polygons(new Polygon(CreatePolygon.SquarePoly(10_000)));
+            var polys = CreatePolygon.SquarePoly(10_000);
 
             // Act
             var offsetPolys = _offset.PolyOffset(polys, 1_000);
 
             // Assert
-            offsetPolys.Polys.Should().ContainSingle()
-                .Which.Poly.Should().HaveCount(4)
+            offsetPolys.Should().ContainSingle()
+                .Which.Should().HaveCount(4)
                 .And.OnlyContain(p => Math.Abs(p.X) == 6_000 && Math.Abs(p.Y) == 6_000);
         }
 
@@ -83,18 +83,17 @@ namespace SlicerTests.Slicer.Clipper
         public void PolyOffsets_ShouldMergePositiveOffset()
         {
             // Arrange
-            var polys = new Polygons(new List<List<IntPoint>>()
-            {
+            var polys = new Polygons(
                 CreatePolygon.RectPoly(4_000, 10_000, new IntPoint(-3_000, 0)),
-                CreatePolygon.RectPoly(4_000, 10_000, new IntPoint(+3_000, 0)),
-            });
+                CreatePolygon.RectPoly(4_000, 10_000, new IntPoint(+3_000, 0))
+            );
 
             // Act
             var offsetPolys = _offset.PolyOffset(polys, 1_000);
 
             // Assert
-            offsetPolys.Polys.Should().ContainSingle()
-                .Which.Poly.Should().HaveCount(4)
+            offsetPolys.Should().ContainSingle()
+                .Which.Should().HaveCount(4)
                 .And.OnlyContain(p => Math.Abs(p.X) == 6_000 && Math.Abs(p.Y) == 6_000);
         }
     }

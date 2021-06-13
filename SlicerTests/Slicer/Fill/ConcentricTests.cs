@@ -33,7 +33,7 @@ namespace SlicerTests.Slicer.Fill
             var paths = concentric.ConcentricFill(new Polygon(contour), 1_000);
 
             // Assert 
-            paths.GetPolys().Should().HaveSameCount(expectedPaths)
+            paths.Should().HaveSameCount(expectedPaths)
                 .And.SatisfyRespectively(
                 x0 => x0.Should().BeSubsetOf(expectedPaths[0]),
                 x1 => x1.Should().BeSubsetOf(expectedPaths[1]),
@@ -63,7 +63,7 @@ namespace SlicerTests.Slicer.Fill
             var paths = concentric.ConcentricOutside(new Polygons(new Polygon(contour)), 1_000, 3);
 
             // Assert 
-            paths.GetPolys().Should().HaveSameCount(expectedPaths)
+            paths.Should().HaveSameCount(expectedPaths)
                 .And.SatisfyRespectively(
                     x0 => x0.Should().BeSubsetOf(expectedPaths[0]),
                     x1 => x1.Should().BeSubsetOf(expectedPaths[1]),

@@ -44,7 +44,7 @@ namespace Slicer.Slicer.Slice
                 polys.Add(poly);
             }
 
-            polys.Polys.RemoveAll(x => x.Poly.Count < 3);
+            polys.RemoveAll(x => x.Count < 3);
 
             polys.Close();
 
@@ -60,17 +60,17 @@ namespace Slicer.Slicer.Slice
                 for (int i = lines.Count - 1; i >= 0; i--)
                 {
                     var curLine = lines[i];
-                    if (AlmostEqual(poly.Poly[^1], curLine.Pt0))
+                    if (AlmostEqual(poly[^1], curLine.Pt0))
                     {
-                        poly.Poly.Add(curLine.Pt1);
+                        poly.Add(curLine.Pt1);
                         lines.RemoveAt(i);
                         progress = true;
                         break;
                     }
 
-                    if (AlmostEqual(poly.Poly[^1], curLine.Pt1))
+                    if (AlmostEqual(poly[^1], curLine.Pt1))
                     {
-                        poly.Poly.Add(curLine.Pt0);
+                        poly.Add(curLine.Pt0);
                         lines.RemoveAt(i);
                         progress = true;
                         break;

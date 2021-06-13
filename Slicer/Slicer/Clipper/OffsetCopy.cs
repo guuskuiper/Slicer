@@ -40,9 +40,9 @@ namespace Slicer.Slicer.Clipper
 
         private void AddPolys(ClipperOffset clipperOffset, Polygons input)
         {
-            foreach (Polygon poly in input.Polys)
+            foreach (Polygon poly in input)
             {
-                clipperOffset.AddPath(poly.Poly, JoinType.jtMiter, EndType.etClosedPolygon);
+                clipperOffset.AddPath(poly, JoinType.jtMiter, EndType.etClosedPolygon);
             }
         }
     }

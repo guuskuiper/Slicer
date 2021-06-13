@@ -36,9 +36,9 @@ namespace Slicer.Slicer.PolygonOperations
         public static Models.Polygons Reduce(Models.Polygons polys, long epsilon_um, bool useStack = true, bool usePreprocessing = false)
         {
             var reducedPolys = new Models.Polygons(polys.Count);
-            foreach (var poly in polys.Polys)
+            foreach (var poly in polys)
             {
-                reducedPolys.Add(new Models.Polygon(Reduce(poly.Poly, epsilon_um, useStack, usePreprocessing)));
+                reducedPolys.Add(new Models.Polygon(Reduce(poly, epsilon_um, useStack, usePreprocessing)));
             }
             return reducedPolys;
         }

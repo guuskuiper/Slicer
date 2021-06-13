@@ -1,6 +1,7 @@
 ﻿using ClipperLib;
 using Slicer.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Slicer.Slicer.Clipper
 {
@@ -46,9 +47,9 @@ namespace Slicer.Slicer.Clipper
 
         private void AddPolys(Polygons input)
         {
-            foreach (Polygon poly in input.Polys)
+            foreach (Polygon poly in input)
             {
-                _clipperOffset.AddPath(poly.Poly, JoinType.jtMiter, EndType.etClosedPolygon);
+                _clipperOffset.AddPath(poly, JoinType.jtMiter, EndType.etClosedPolygon);
             }
         }
     }
