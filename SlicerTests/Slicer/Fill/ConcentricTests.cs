@@ -30,7 +30,7 @@ namespace SlicerTests.Slicer.Fill
             };
 
             // Act
-            var paths = concentric.ConcentricFill(new Polygon(contour), 1_000);
+            var paths = concentric.ConcentricFill(contour, 1_000);
 
             // Assert 
             paths.Should().HaveSameCount(expectedPaths)

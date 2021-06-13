@@ -1,11 +1,13 @@
 ﻿using ClipperLib;
+using Slicer.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Slicer.Slicer.PolygonOperations
 {
-    using Polygon = List<IntPoint>;
-    using Polygons = List<List<IntPoint>>;
+    //using Polygon = List<IntPoint>;
+    //using Polygons = List<List<IntPoint>>;
 
     public static class Simplify
     {
@@ -22,25 +24,7 @@ namespace Slicer.Slicer.PolygonOperations
         /// <returns></returns>
         public static Polygon Reduce(Polygon poly, long epsilon_um, bool useStack = true, bool usePreprocessing = false)
         {
-            return DouglasPeucker<IntPoint>.Reduce(poly, epsilon_um, GetX, GetY, useStack, usePreprocessing);
-        }
-
-        /// <summary>
-        /// Reduce the number of points in "polys".
-        /// </summary>
-        /// <param name="polys">A list of polygons</param>
-        /// <param name="epsilon_um">The maximum deviation from the original path</param>
-        /// <param name="useStack">Enable to use a stack in stead of recursion (and avoid the recursion limit for large polys) </param>
-        /// <param name="usePreprocessing">First use a fast, but low quality preprocessing step to simplify the poly</param>
-        /// <returns></returns>
-        public static Models.Polygons Reduce(Models.Polygons polys, long epsilon_um, bool useStack = true, bool usePreprocessing = false)
-        {
-            var reducedPolys = new Models.Polygons(polys.Count);
-            foreach (var poly in polys)
-            {
-                reducedPolys.Add(new Models.Polygon(Reduce(poly, epsilon_um, useStack, usePreprocessing)));
-            }
-            return reducedPolys;
+            return new Polygon(DouglasPeucker<IntPoint>.Reduce(poly.AsReadOnly(), epsilon_um, GetX, GetY, useStack, usePreprocessing));
         }
 
         /// <summary>
@@ -205,7 +189,7 @@ namespace Slicer.Slicer.PolygonOperations
 
     public class DouglasPeucker<T>
     {
-        private readonly List<T> Poly;
+        private readonly IReadOnlyList<T> Poly;
         private readonly bool[] Remove;
         private readonly double Epsilon_um2;
         private readonly Stack<(int, int)> Stack;
@@ -220,7 +204,7 @@ namespace Slicer.Slicer.PolygonOperations
         /// <param name="squaredLineDistanceFunc">A function to get the squared distance from point T1 to line segment T2 - T3</param>
         /// <param name="useStack">Enable to use a stack in stead of recursion (and avoid the recursion limit for large polys) </param>
         /// <returns></returns>
-        public static List<T> Reduce(List<T> poly, double epsilon_um, Func<T, T, T, double> squaredLineDistanceFunc, bool useStack = true)
+        public static IReadOnlyList<T> Reduce(IReadOnlyList<T> poly, double epsilon_um, Func<T, T, T, double> squaredLineDistanceFunc, bool useStack = true)
         {
             var epsilon_um2 = epsilon_um * epsilon_um;
             var dp = new DouglasPeucker<T>(poly, epsilon_um2, squaredLineDistanceFunc, useStack);
@@ -236,7 +220,7 @@ namespace Slicer.Slicer.PolygonOperations
         /// <param name="squaredDistanceFunc">A function to get the squared distance from point T1 to point T2, used in the preprocessing function</param>
         /// <param name="useStack">Enable to use a stack in stead of recursion (and avoid the recursion limit for large polys) </param>
         /// <returns></returns>
-        public static List<T> Reduce(List<T> poly, double epsilon_um, Func<T, T, T, double> squaredLineDistanceFunc, Func<T, T, double> squaredDistanceFunc, bool useStack = true)
+        public static IReadOnlyList<T> Reduce(IReadOnlyList<T> poly, double epsilon_um, Func<T, T, T, double> squaredLineDistanceFunc, Func<T, T, double> squaredDistanceFunc, bool useStack = true)
         {
             var epsilon_um2 = epsilon_um * epsilon_um;
             poly = PreProcess(poly, epsilon_um2, squaredDistanceFunc);
@@ -254,7 +238,7 @@ namespace Slicer.Slicer.PolygonOperations
         /// <param name="useStack">Enable to use a stack in stead of recursion (and avoid the recursion limit for large polys) </param>
         /// <param name="usePreprocessing">First use a fast, but low quality preprocessing step to simplify the poly</param>
         /// <returns></returns>
-        public static List<T> Reduce(List<T> poly, double epsilon_um, Func<T, double> getX, Func<T, double> getY, bool useStack = true, bool usePreprocessing = false)
+        public static IReadOnlyList<T> Reduce(IReadOnlyList<T> poly, double epsilon_um, Func<T, double> getX, Func<T, double> getY, bool useStack = true, bool usePreprocessing = false)
         {
             double squaredLineDistance(T pt, T l0, T l1) => Simplify.LineSegmentDistanceSquared(getX(pt), getY(pt), getX(l0), getY(l0), getX(l1), getY(l1), out _, out _);
             var epsilon_um2 = epsilon_um * epsilon_um;
@@ -267,7 +251,7 @@ namespace Slicer.Slicer.PolygonOperations
             return dp.Result();
         }
 
-        private DouglasPeucker(List<T> poly, double epsilon_um2, Func<T, T, T, double> squaredDistanceFunc, bool useStack)
+        private DouglasPeucker(IReadOnlyList<T> poly, double epsilon_um2, Func<T, T, T, double> squaredDistanceFunc, bool useStack)
         {
             Poly = poly;
             Remove = new bool[Poly.Count];
@@ -277,7 +261,7 @@ namespace Slicer.Slicer.PolygonOperations
             if (useStack) Stack = new Stack<(int, int)>();
         }
 
-        private List<T> Result()
+        private IReadOnlyList<T> Result()
         {
             if (Poly.Count < 3) return Poly;
 
@@ -359,7 +343,7 @@ namespace Slicer.Slicer.PolygonOperations
         /// <param name="getX">A function to get the X coordinate from T</param>
         /// <param name="getY">A function to get the Y coordinate from T</param>
         /// <returns></returns>
-        private static List<T> PreProcess(List<T> poly, double epsilon_um2, Func<T, T, double> getDistanceSquared)
+        private static IReadOnlyList<T> PreProcess(IReadOnlyList<T> poly, double epsilon_um2, Func<T, T, double> getDistanceSquared)
         {
             if (poly.Count < 3) return poly;
 
