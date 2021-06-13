@@ -25,6 +25,8 @@ namespace Slicer
             services.AddTransient<IFiller, Filler>();
             services.AddTransient<ISort, Sort>();
             services.AddSingleton<Project>();
+            services.AddTransient<GcodeState>();
+            services.AddTransient<IGcodeCommands, GcodeCommands>();
             services.AddTransient<IGcode, Gcode>();
             services.AddTransient<IConcentric, Concentric>();
             services.AddTransient<IOffset, Offset>();

@@ -11,14 +11,17 @@ namespace Slicer.Slicer.Output
 {
     public class Gcode : IGcode
     {
-        private StringBuilder sb = new StringBuilder();
-        private IntPoint currentPt = new IntPoint();
-        private Project _project;
-        private double currentE = 0;
+        private readonly IGcodeCommands _gcodeCommands;
+        private readonly Project _project;
 
-        public Gcode(Project project)
+        private readonly StringBuilder _sb = new();
+        private readonly GcodeState _state;
+
+        public Gcode(Project project, IGcodeCommands gcodeCommands, GcodeState state)
         {
             _project = project;
+            _gcodeCommands = gcodeCommands;
+            _state = state;
         }
 
         public string Create(IOrderedEnumerable<SortedLayer> layers)
@@ -28,7 +31,7 @@ namespace Slicer.Slicer.Output
                 CreateLayer(layer);
             }
 
-            return sb.ToString();
+            return _sb.ToString();
         }
 
         private void CreateLayer(SortedLayer layer)
@@ -42,20 +45,20 @@ namespace Slicer.Slicer.Output
 
         private void TravelZ(double z, double speed)
         {
-            sb.AppendLine($"G0 Z{z:F3} F{speed:F3}");
+            _sb.AppendLine(_gcodeCommands.TravelZ(z, speed));
         }
 
         private void TravelXY(IntPoint pt, double speed)
         {
-            sb.AppendLine($"G0 X{(pt.X / 1000.0):F3} Y{(pt.Y / 1000.0):F3} F{speed:F3}");
-            currentPt = pt;
+            _sb.AppendLine(_gcodeCommands.TravelXY(pt, speed));
+            _state.Pt = pt;
         }
 
         private void Extruder(IntPoint pt, double volume, double speed)
         {
-            currentE += volume;
-            sb.AppendLine($"G1 X{(pt.X / 1000.0):F3} Y{(pt.Y / 1000.0):F3} F{speed:F3} E{currentE:F3}");
-            currentPt = pt;
+            _state.E += volume;
+            _sb.AppendLine(_gcodeCommands.Extrude(pt, _state.E, speed));
+            _state.Pt = pt;
         }
 
         private void PrintPath(Polygon path, double thickness)
@@ -64,14 +67,14 @@ namespace Slicer.Slicer.Output
 
             IntPoint nextPt = path.Poly[0];
 
-            if (currentPt != nextPt)
+            if (_state.Pt != nextPt)
             {
                 TravelXY(nextPt, _project.setting.TravelSpeed);
             }
 
             foreach (IntPoint pt in path.Poly.Skip(1))
             {
-                var e = CalcVolume(currentPt, pt, thickness, _project.setting.LineWidth / 1000.0);
+                var e = CalcVolume(_state.Pt, pt, thickness, _project.setting.LineWidth / 1000.0);
 
                 Extruder(pt, e, _project.setting.PrintSpeed);
             }
