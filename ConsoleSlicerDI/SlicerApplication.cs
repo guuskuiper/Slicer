@@ -60,12 +60,7 @@ namespace ConsoleSlicerDI
 
         private static SlicerServiceOptions SlicerServiceOptions(SlicerApplicationOption options)
         {
-            return new SlicerServiceOptions()
-            {
-                InputFilePath = options.Infile,
-                OutputFilePath = options.Outfile,
-                Parallel = options.Parallel
-            };
+            return new SlicerServiceOptions(options.Infile, options.Outfile, options.Parallel);
         }
     }
 }
