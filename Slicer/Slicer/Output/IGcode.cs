@@ -8,6 +8,6 @@ namespace Slicer.Slicer.Output
 {
     public interface IGcode
     {
-        string Create(IOrderedEnumerable<SortedLayer> layers);
+        string Create(IEnumerable<Layer> layers);
     }
 }

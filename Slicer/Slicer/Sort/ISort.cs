@@ -7,6 +7,7 @@ namespace Slicer.Slicer.Sort
 {
     public interface ISort
     {
-        (SortedLayer, IntPoint) SortPolygons(Layer layer, IntPoint prevPt);
+        (Layer, IntPoint) SortPolygons(Layer layer, IntPoint prevPt);
+        IntPoint SortPolygonsInplace(Layer layer, IntPoint prevPt);
     }
 }

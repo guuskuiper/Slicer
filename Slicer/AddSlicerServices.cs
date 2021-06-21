@@ -4,6 +4,7 @@ using ClipperLib;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Slicer.Middleware;
 using Slicer.Models;
 using Slicer.Options;
 using Slicer.Services;
@@ -23,7 +24,13 @@ namespace Slicer
     {
         public static IServiceCollection AddSlicerServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<ISliceService, SliceService>();
+            //services.AddTransient<ISliceService, SliceService>();
+            services.AddTransient<ISliceService, PipelinedSliceService>();
+            services.AddTransient<ISlicerMiddelware, STLMiddleware>();
+            services.AddTransient<ISlicerMiddelware, LayerMiddleware>();
+            services.AddTransient<ISlicerMiddelware, FillMiddleware>();
+            services.AddTransient<ISlicerMiddelware, SortingMiddleware>();
+            services.AddTransient<ISlicerMiddelware, GcodeMiddleware>();
             services.AddTransient<IFileIO, FileIO>();
             services.AddTransient<ILayers, Layers>();
             services.AddTransient<IFiller, Filler>();

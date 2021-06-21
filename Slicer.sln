@@ -16,7 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "Benchmark\Benc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlicerTests", "SlicerTests\SlicerTests.csproj", "{A2DDC964-0535-4880-BA85-C05869B0D555}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlicerMediatR", "SlicerMediatR\SlicerMediatR.csproj", "{5586C5C4-F490-46C8-B4DB-48EF94BEE985}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlicerMediatR", "SlicerMediatR\SlicerMediatR.csproj", "{5586C5C4-F490-46C8-B4DB-48EF94BEE985}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomDI", "CustomDI\CustomDI.csproj", "{3F54A2A2-79AC-4A60-A1DC-ABEF72536630}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{5586C5C4-F490-46C8-B4DB-48EF94BEE985}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5586C5C4-F490-46C8-B4DB-48EF94BEE985}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5586C5C4-F490-46C8-B4DB-48EF94BEE985}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F54A2A2-79AC-4A60-A1DC-ABEF72536630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F54A2A2-79AC-4A60-A1DC-ABEF72536630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F54A2A2-79AC-4A60-A1DC-ABEF72536630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F54A2A2-79AC-4A60-A1DC-ABEF72536630}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

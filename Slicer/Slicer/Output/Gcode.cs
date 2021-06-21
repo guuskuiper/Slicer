@@ -23,10 +23,10 @@ namespace Slicer.Slicer.Output
             _gcodeCommands = gcodeCommands;
             _state = state;
         }
-
-        public string Create(IOrderedEnumerable<SortedLayer> layers)
+        
+        public string Create(IEnumerable<Layer> layers)
         {
-            foreach (SortedLayer layer in layers)
+            foreach (Layer layer in layers)
             {
                 CreateLayer(layer);
             }
@@ -34,7 +34,7 @@ namespace Slicer.Slicer.Output
             return _sb.ToString();
         }
 
-        private void CreateLayer(SortedLayer layer)
+        private void CreateLayer(Layer layer)
         {
             TravelZ(layer.Height, _project.Settings.TravelSpeed);
             foreach (var path in layer.Paths)

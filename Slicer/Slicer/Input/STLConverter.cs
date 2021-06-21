@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Text;
+using System.Threading.Tasks;
+using System;
 
 namespace Slicer.Slicer.Input
 {
@@ -40,7 +42,7 @@ namespace Slicer.Slicer.Input
 
         public void WriteBinarySTL(Stream file, STL stl)
         {
-            using BinaryWriter w = new BinaryWriter(file, Encoding.ASCII);
+            using BinaryWriter w = new BinaryWriter(file, Encoding.ASCII, true);
             byte[] bytes =  Encoding.ASCII.GetBytes(stl.Header.PadRight(80, '\0'));
             w.Write(bytes);
             w.Write(stl.NumerOfTriangles);

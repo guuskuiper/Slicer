@@ -2,7 +2,7 @@
 
 namespace Slicer.Models
 {
-    public class Layer
+    public class Layer : SortedLayer
     {
         public Polygons Contour { get; set; }
         public double Height { get; set; }

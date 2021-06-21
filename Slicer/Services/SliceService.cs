@@ -1,6 +1,7 @@
 ﻿using ClipperLib;
 using FluentValidation;
 using Serilog;
+using Slicer.Middleware;
 using Slicer.Models;
 using Slicer.Options;
 using Slicer.Slicer.Fill;
@@ -69,7 +70,7 @@ namespace Slicer.Services
             return "";
         }
 
-        private async Task Output(string outputFilePath, IOrderedEnumerable<SortedLayer> layers)
+        private async Task Output(string outputFilePath, IOrderedEnumerable<Layer> layers)
         {
             var gcode = _gcode.Create(layers);
             await _fileIO.WriteTextAsync(outputFilePath, gcode);
@@ -90,12 +91,12 @@ namespace Slicer.Services
             }
         }
 
-        private IOrderedEnumerable<SortedLayer> Sort(List<Layer> layers, bool parallel)
+        private IOrderedEnumerable<Layer> Sort(List<Layer> layers, bool parallel)
         {
-            List<SortedLayer> sortedLayers = new List<SortedLayer>(layers.Capacity);
+            List<Layer> sortedLayers = new List<Layer>(layers.Capacity);
             if (parallel)
             {
-                sortedLayers.AddRange(_parallelScope.Parallelize<Layer, ISort, SortedLayer>(layers, (layer, sort) => sort.SortPolygons(layer, new IntPoint(0, 0)).Item1));
+                sortedLayers.AddRange(_parallelScope.Parallelize<Layer, ISort, Layer>(layers, (layer, sort) => sort.SortPolygons(layer, new IntPoint(0, 0)).Item1));
             }
             else
             {
@@ -109,7 +110,7 @@ namespace Slicer.Services
                 }
             }
 
-            IOrderedEnumerable<SortedLayer> orderedEnumerable = sortedLayers.OrderBy(x => x.Height);
+            IOrderedEnumerable<Layer> orderedEnumerable = sortedLayers.OrderBy(x => x.Height);
 
             return orderedEnumerable;
         }

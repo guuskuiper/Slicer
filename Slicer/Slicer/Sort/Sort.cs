@@ -7,9 +7,9 @@ namespace Slicer.Slicer.Sort
 {
     public class Sort : ISort
     {
-        public (SortedLayer, IntPoint) SortPolygons(Layer layer, IntPoint prevPt)
+        public (Layer, IntPoint) SortPolygons(Layer layer, IntPoint prevPt)
         {
-            var sortedLayer = new SortedLayer {Height = layer.Height, Thickness = layer.Thickness};
+            var sortedLayer = new Layer {Height = layer.Height, Thickness = layer.Thickness};
 
             IntPoint curPoint = prevPt;
             foreach (var path in layer.Paths)
@@ -19,6 +19,21 @@ namespace Slicer.Slicer.Sort
             }
 
             return (sortedLayer, curPoint);
+        }
+
+        public IntPoint SortPolygonsInplace(Layer layer, IntPoint prevPt)
+        {
+            Polygons paths = layer.Paths;
+            layer.Paths = new Polygons();
+            
+            IntPoint curPoint = prevPt;
+            foreach (var path in layer.Paths)
+            {
+                layer.Paths.Add(path);
+                curPoint = path[^1];
+            }
+
+            return curPoint;
         }
     }
 }

@@ -150,12 +150,55 @@ namespace SlicerTests.Slicer.Clipper
                 CreatePolygon.RectPoly(10_000, 5_000, new IntPoint(0,  2_500)),
                 CreatePolygon.RectPoly(10_000, 5_000, new IntPoint(0, -7_500)),
             };
+
             // Act
             var result = clipper.Xor(new Polygons(subject), new Polygons(clip));
 
             // Assert 
             result.Should().HaveCount(2)
                 .And.BeEquivalentTo(expected);
+        }
+
+        [Fact(Skip = "ClipperLib bug")]
+        public void BugTest()
+        {
+            // Arrange
+            IClip clipper = new Clip(new ClipperLib.Clipper());
+
+            Polygon subj = new Polygon()
+            {
+                new IntPoint(65_000, 44_000),
+                new IntPoint(64_000, 44_000),
+                //new IntPoint(64_000, 44_001), //change previous point? Not horizontal anymore
+                new IntPoint(63_000, 43_000),
+                new IntPoint(63_000, 51_000)
+            };
+
+            Polygons clip = new Polygons()
+            {
+                new Polygon()
+                {
+                    new IntPoint(60_000, 50_000),
+                    new IntPoint(70_000, 50_000),
+                    new IntPoint(70_000, 40_000),
+                    new IntPoint(60_000, 40_000)
+                }
+            };
+
+            Polygon expected = new Polygon()
+            {
+                new IntPoint(63_000, 50_000),
+                new IntPoint(63_000, 43_000),
+                new IntPoint(64_000, 44_000),
+                new IntPoint(65_000, 44_000)
+            };
+
+            // Act
+            var result = clipper.IntersectionOpen(new Polygons(subj), clip);
+
+            // Assert 
+            result.Should().ContainSingle()
+                .Which.Should().ContainInOrder(expected);
         }
     }
 }
