@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class LayerMiddleware : ISlicerMiddelware
+    public class LayerStage : ISlicerStage
     {
         private readonly ILayers _layers;
 
-        public LayerMiddleware(ILayers layers)
+        public LayerStage(ILayers layers)
         {
             _layers = layers;
         }
 
-        public async Task Execute(SlicerState request, Func<Task> next)
+        public async Task Execute(SlicerState request, NextDelegate next)
         {
             request.Layers = _layers.CreateLayers(request.STL, true);
             

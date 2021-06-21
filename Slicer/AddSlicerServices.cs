@@ -26,11 +26,11 @@ namespace Slicer
         {
             //services.AddTransient<ISliceService, SliceService>();
             services.AddTransient<ISliceService, PipelinedSliceService>();
-            services.AddTransient<ISlicerMiddelware, STLMiddleware>();
-            services.AddTransient<ISlicerMiddelware, LayerMiddleware>();
-            services.AddTransient<ISlicerMiddelware, FillMiddleware>();
-            services.AddTransient<ISlicerMiddelware, SortingMiddleware>();
-            services.AddTransient<ISlicerMiddelware, GcodeMiddleware>();
+            services.AddTransient<ISlicerStage, STLStage>();
+            services.AddTransient<ISlicerStage, LayerStage>();
+            services.AddTransient<ISlicerStage, FillStage>();
+            services.AddTransient<ISlicerStage, SortingStage>();
+            services.AddTransient<ISlicerStage, GcodeStage>();
             services.AddTransient<IFileIO, FileIO>();
             services.AddTransient<ILayers, Layers>();
             services.AddTransient<IFiller, Filler>();

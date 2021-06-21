@@ -11,13 +11,10 @@ namespace Slicer.Middleware
         public Task<TResponse> Execute(TRequest request, Func<TRequest, Task<TResponse>> next);
     }
     
-    public interface IMiddleware<TRequest>
+    public delegate Task NextDelegate();
+    
+    public interface IMiddleware<in TRequest>
     {
-        public Task Execute(TRequest request, Func<Task> next);
-    }
-
-    public interface ISlicerMiddelware : IMiddleware<SlicerState>
-    {
-        
+        public Task Execute(TRequest request, NextDelegate next);
     }
 }

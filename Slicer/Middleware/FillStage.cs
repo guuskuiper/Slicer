@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class FillMiddleware : ISlicerMiddelware
+    public class FillStage : ISlicerStage
     {
         private readonly IParallelScope _parallelScope;
         private readonly IFiller _filler;
 
-        public FillMiddleware(IParallelScope parallelScope, IFiller filler)
+        public FillStage(IParallelScope parallelScope, IFiller filler)
         {
             _parallelScope = parallelScope;
             _filler = filler;
         }
 
-        public async Task Execute(SlicerState request, Func<Task> next)
+        public async Task Execute(SlicerState request, NextDelegate next)
         {
             Fill(request.Layers, request.Options.Parallel);
             

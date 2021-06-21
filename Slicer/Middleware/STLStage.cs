@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class STLMiddleware : ISlicerMiddelware
+    public class STLStage : ISlicerStage
     {
         private readonly STLConverter _stlConverter;
 
-        public STLMiddleware(STLConverter stlConverter)
+        public STLStage(STLConverter stlConverter)
         {
             _stlConverter = stlConverter;
         }
 
-        public async Task Execute(SlicerState request, Func<Task> next)
+        public async Task Execute(SlicerState request, NextDelegate next)
         {
             // pre
             request.STL = _stlConverter.Read(request.Options.InputFilePath);

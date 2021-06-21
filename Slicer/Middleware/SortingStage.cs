@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class SortingMiddleware : ISlicerMiddelware
+    public class SortingStage : ISlicerStage
     {
         private readonly IParallelScope _parallelScope;
         private readonly ISort _sort;
 
-        public SortingMiddleware(IParallelScope parallelScope, ISort sort)
+        public SortingStage(IParallelScope parallelScope, ISort sort)
         {
             _parallelScope = parallelScope;
             _sort = sort;
         }
 
-        public async Task Execute(SlicerState request, Func<Task> next)
+        public async Task Execute(SlicerState request, NextDelegate next)
         {
             Sort(request.Layers, request.Options.Parallel);
             await next();
