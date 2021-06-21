@@ -2,7 +2,7 @@
   "profiles": {
     "ConsoleSlicerDI": {
       "commandName": "Project",
-      "commandLineArgs": "-i \"C:\\Users\\GKU\\git\\JobCreator_Code\\Archive\\3D Models\\Solid cilinder 20mm.stl\" -o \"debug.gcode\""
+      "commandLineArgs": "-i \"Solid cilinder 20mm.stl\" -o \"debug.gcode\""
     }
   }
 }
