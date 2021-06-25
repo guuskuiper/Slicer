@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class STLStage : ISlicerStage
+    public class STLStage : ISlicerStage, ISlicerStageResponse
     {
         private readonly STLConverter _stlConverter;
 
@@ -16,15 +16,24 @@ namespace Slicer.Middleware
             _stlConverter = stlConverter;
         }
 
-        public async Task Execute(SlicerState request, NextDelegate next)
+        public Task Execute(SlicerState request, NextDelegate next)
         {
             // pre
             request.STL = _stlConverter.Read(request.Options.InputFilePath);
             
             // next
-            await next();
+            return next();
             
             // post            
+        }
+
+        public async Task<SlicerResponse> Execute(SlicerState request, NextResponseDelegate<SlicerResponse> next)
+        {
+            request.STL = _stlConverter.Read(request.Options.InputFilePath);
+
+            var response = await next();
+
+            return response;
         }
     }
 }

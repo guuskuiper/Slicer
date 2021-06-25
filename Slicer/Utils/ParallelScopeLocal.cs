@@ -66,5 +66,53 @@ namespace Slicer.Utils
 
             return results;
         }
+        
+        
+        public IEnumerable<TR> ParallelizeAsync<T, TS, TR>(IEnumerable<T> items, Func<T, TS, TR> func)
+        {
+            return Partitioner.Create(items)
+                .GetPartitions(Environment.ProcessorCount)
+                .AsParallel()
+                .SelectMany( x => ParallelInner<TR, T, TS>(x, func));
+        }
+        
+        public async Task<IEnumerable<TR>> ParallelizeAsync<T, TS, TR>(IEnumerable<T> items, Func<T, TS, Task<TR>> func)
+        {
+            return (await Task.WhenAll(Partitioner.Create(items)
+                .GetPartitions(Environment.ProcessorCount)
+                .AsParallel()
+                .Select(x => ParallelInnerAsync(x, func)))).SelectMany(xx => xx);
+        }
+
+        private IEnumerable<TR> ParallelInner<TR, T, TS>(IEnumerator<T> partition, Func<T, TS, TR> convert)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            _logger.Debug("Created scope {0} on thread {1}", scope.GetHashCode(), Thread.CurrentThread.ManagedThreadId);
+            TS service = scope.ServiceProvider.GetRequiredService<TS>();
+            using (partition)
+            {
+                while (partition.MoveNext())
+                {
+                    yield return convert(partition.Current, service);
+                }
+            }
+        }
+        
+        private async Task<IEnumerable<TR>> ParallelInnerAsync<TR, T, TS>(IEnumerator<T> partition, Func<T, TS, Task<TR>> convert)
+        {
+            List<TR> result = new();
+            using var scope = _scopeFactory.CreateScope();
+            _logger.Debug("Created scope {0} on thread {1}", scope.GetHashCode(), Thread.CurrentThread.ManagedThreadId);
+            TS service = scope.ServiceProvider.GetRequiredService<TS>();
+            using (partition)
+            {
+                while (partition.MoveNext())
+                {
+                    result.Add(await convert(partition.Current, service));
+                }
+            }
+
+            return result;
+        }
     }
 }

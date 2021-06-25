@@ -25,6 +25,11 @@ namespace Slicer
         public static IServiceCollection AddSlicerServices(this IServiceCollection services, IConfiguration configuration)
         {
             //services.AddTransient<ISliceService, SliceService>();
+            services.AddTransient<ISlicerStageResponse, STLStage>();
+            services.AddTransient<ISlicerStageResponse, LayerStage>();
+            services.AddTransient<ISlicerStageResponse, FillStage>();
+            services.AddTransient<ISlicerStageResponse, SortingStage>();
+            services.AddTransient<ISlicerStageResponse, GcodeStage>();
             services.AddTransient<ISliceService, PipelinedSliceService>();
             services.AddTransient<ISlicerStage, STLStage>();
             services.AddTransient<ISlicerStage, LayerStage>();

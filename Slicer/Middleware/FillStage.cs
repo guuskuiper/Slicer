@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class FillStage : ISlicerStage
+    public class FillStage : ISlicerStage, ISlicerStageResponse
     {
         private readonly IParallelScope _parallelScope;
         private readonly IFiller _filler;
@@ -20,11 +20,18 @@ namespace Slicer.Middleware
             _filler = filler;
         }
 
-        public async Task Execute(SlicerState request, NextDelegate next)
+        public Task Execute(SlicerState request, NextDelegate next)
         {
             Fill(request.Layers, request.Options.Parallel);
             
-            await next();
+            return next();
+        }
+        
+        public Task<SlicerResponse> Execute(SlicerState request, NextResponseDelegate<SlicerResponse> next)
+        {
+            Fill(request.Layers, request.Options.Parallel);
+            
+            return next();
         }
         
         private void Fill(List<Layer> layers, bool parallel)

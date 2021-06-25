@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class GcodeStage : ISlicerStage
+    public class GcodeStage : ISlicerStage, ISlicerStageResponse
     {
         private readonly IGcode _gcode;
         private readonly IFileIO _fileIO;
@@ -21,6 +21,19 @@ namespace Slicer.Middleware
         {
             request.Gcode = _gcode.Create(request.Layers);
             await _fileIO.WriteTextAsync(request.Options.OutputFilePath, request.Gcode);
+
+            await next();
+        }
+
+        public async Task<SlicerResponse> Execute(SlicerState request, NextResponseDelegate<SlicerResponse> next)
+        {
+            var gcode  = _gcode.Create(request.Layers);
+            await _fileIO.WriteTextAsync(request.Options.OutputFilePath, gcode);
+            
+            var response = await next();
+
+            response.Gcode = gcode;
+            return response;
         }
     }
 }

@@ -8,9 +8,10 @@ namespace Slicer.Middleware
 {
     public interface IMiddleware<TRequest, TResponse>
     {
-        public Task<TResponse> Execute(TRequest request, Func<TRequest, Task<TResponse>> next);
+        public Task<TResponse> Execute(TRequest request, NextResponseDelegate<TResponse> next);
     }
     
+    public delegate Task<TResponse> NextResponseDelegate<TResponse>();
     public delegate Task NextDelegate();
     
     public interface IMiddleware<in TRequest>

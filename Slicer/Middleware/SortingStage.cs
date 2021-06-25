@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Slicer.Middleware
 {
-    public class SortingStage : ISlicerStage
+    public class SortingStage : ISlicerStage, ISlicerStageResponse
     {
         private readonly IParallelScope _parallelScope;
         private readonly ISort _sort;
@@ -22,10 +22,16 @@ namespace Slicer.Middleware
             _sort = sort;
         }
 
-        public async Task Execute(SlicerState request, NextDelegate next)
+        public Task Execute(SlicerState request, NextDelegate next)
         {
             Sort(request.Layers, request.Options.Parallel);
-            await next();
+            return next();
+        }
+        
+        public Task<SlicerResponse> Execute(SlicerState request, NextResponseDelegate<SlicerResponse> next)
+        {
+            Sort(request.Layers, request.Options.Parallel);
+            return next();
         }
         
         private void Sort(List<Layer> layers, bool parallel)
