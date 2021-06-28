@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Slicer.Slicer.PolygonOperations
+namespace Slicer.Slicer.PolygonOperations.Triangulation
 {
     public class DelaunayIncremental : ITriangulate
     {
         private List<Triangle> _triangles;
-        private HalfEdgeStructure _halfEdgeStructure;
         private IntRect _boundsOffset;
         private HashSet<IntPoint> _exterior;
         private Dictionary<IntPoint, Vertex> _mapping;
@@ -110,18 +109,18 @@ namespace Slicer.Slicer.PolygonOperations
                 }
 
                 //Returns 0 if false, -1 if pt is on poly and +1 if pt is in poly.
-                int pointIn = ClipperLib.Clipper.PointInPolygon(pt, new List<IntPoint> {triangle.P0, triangle.P1, triangle.P2});
-                if(pointIn > 0)
-                {
-                    InsertTriangle(pt, triangle);
-                    return;
-                }
-                
-                // point on polygon
-                if (pointIn < 0)
-                {
-                    return;   
-                }
+                // int pointIn = ClipperLib.Clipper.PointInPolygon(pt, new List<IntPoint> {triangle.P0, triangle.P1, triangle.P2});
+                // if(pointIn > 0)
+                // {
+                //     InsertTriangle(pt, triangle);
+                //     return;
+                // }
+                //
+                // // point on polygon
+                // if (pointIn < 0)
+                // {
+                //     return;   
+                // }
             }
             
             // Point ON a triangle? what to do? (nothing?)
@@ -144,7 +143,7 @@ namespace Slicer.Slicer.PolygonOperations
         private void SwapTest(IntPoint a, IntPoint b, IntPoint p)
         {
             if(_base.Contains(a) && _base.Contains(b)) return;
-            if(_exterior.Contains(a) && _exterior.Contains(b)) return;
+            if(_exterior.Contains(a) && _exterior.Contains(b)) return;  // TODO check if 2 point are connected in original polygon
 
             IntPoint d = FindOpposite(a, b, p);
 

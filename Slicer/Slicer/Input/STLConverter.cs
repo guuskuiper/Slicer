@@ -30,7 +30,7 @@ namespace Slicer.Slicer.Input
             var stl = new STL();
             stl.Header = new string(b.ReadChars(80));
             stl.NumerOfTriangles = b.ReadUInt32();
-            stl.Triangles = new List<Triangle>();
+            stl.Triangles = new List<STLTriangle>();
 
             for (int i = 0; i < stl.NumerOfTriangles; i++)
             {
@@ -46,7 +46,7 @@ namespace Slicer.Slicer.Input
             byte[] bytes =  Encoding.ASCII.GetBytes(stl.Header.PadRight(80, '\0'));
             w.Write(bytes);
             w.Write(stl.NumerOfTriangles);
-            foreach (Triangle stlTriangle in stl.Triangles)
+            foreach (STLTriangle stlTriangle in stl.Triangles)
             {
                 WriteTriangle(w, stlTriangle);
             }
@@ -54,9 +54,9 @@ namespace Slicer.Slicer.Input
             w.Flush();
         }
 
-        private Triangle ReadTriangle(BinaryReader b)
+        private STLTriangle ReadTriangle(BinaryReader b)
         {
-            var triangle = new Triangle();
+            var triangle = new STLTriangle();
             triangle.Normal = ReadVector3(b);
             triangle.Vertex1 = ReadVector3(b);
             triangle.Vertex2 = ReadVector3(b);
@@ -65,7 +65,7 @@ namespace Slicer.Slicer.Input
             return triangle;
         }
 
-        private void WriteTriangle(BinaryWriter w, Triangle t)
+        private void WriteTriangle(BinaryWriter w, STLTriangle t)
         {
             WriteVector3(w, t.Normal);
             WriteVector3(w, t.Vertex1);

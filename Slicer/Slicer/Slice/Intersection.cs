@@ -10,7 +10,7 @@ namespace Slicer.Slicer.Slice
 {
     public class Intersection
     {
-        public List<Line> Intersections(float z, IEnumerable<Triangle> triangles)
+        public List<Line> Intersections(float z, IEnumerable<STLTriangle> triangles)
         {
             List<Line> lines = new();
 

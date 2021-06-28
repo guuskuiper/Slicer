@@ -23,9 +23,9 @@ namespace Slicer.Slicer.Input.Tests
             {
                 Header = "Test STL".PadRight(80),
                 NumerOfTriangles = 1,
-                Triangles = new List<Triangle>()
+                Triangles = new List<STLTriangle>()
                 {
-                    new Triangle()
+                    new STLTriangle()
                     {
                         Normal = Vector3.UnitZ,
                         Vertex1 = Vector3.UnitY,
@@ -58,9 +58,9 @@ namespace Slicer.Slicer.Input.Tests
             {
                 Header = "Test STL".PadRight(80),
                 NumerOfTriangles = 1,
-                Triangles = new List<Triangle>()
+                Triangles = new List<STLTriangle>()
                 {
-                    new Triangle()
+                    new STLTriangle()
                     {
                         Normal = Vector3.UnitZ,
                         Vertex1 = Vector3.UnitY,
@@ -98,9 +98,9 @@ namespace Slicer.Slicer.Input.Tests
             {
                 Header = "Test STL".PadRight(80),
                 NumerOfTriangles = 1,
-                Triangles = new List<Triangle>()
+                Triangles = new List<STLTriangle>()
                 {
-                    new Triangle()
+                    new STLTriangle()
                     {
                         Normal = Vector3.UnitZ,
                         Vertex1 = Vector3.UnitY,
@@ -138,9 +138,9 @@ namespace Slicer.Slicer.Input.Tests
             {
                 Header = "Test STL".PadRight(80),
                 NumerOfTriangles = 1,
-                Triangles = new List<Triangle>()
+                Triangles = new List<STLTriangle>()
                 {
-                    new Triangle()
+                    new STLTriangle()
                     {
                         Normal = Vector3.UnitZ,
                         Vertex1 = Vector3.UnitY,

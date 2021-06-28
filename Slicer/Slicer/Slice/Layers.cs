@@ -63,7 +63,7 @@ namespace Slicer.Slicer.Slice
         private float GetMaxZ(STL stl)
         {
             float currentMax = 0;
-            foreach (Triangle triangle in stl.Triangles)
+            foreach (STLTriangle triangle in stl.Triangles)
             {
                 var max = Math.Max(Math.Max(triangle.Vertex1.Z, triangle.Vertex2.Z), triangle.Vertex3.Y);
                 currentMax = Math.Max(currentMax, max);

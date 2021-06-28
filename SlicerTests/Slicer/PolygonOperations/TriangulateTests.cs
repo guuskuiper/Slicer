@@ -3,7 +3,10 @@
 using ClipperLib;
 using FluentAssertions;
 using Slicer.Models;
+using Slicer.Slicer.Clipper;
 using Slicer.Slicer.PolygonOperations;
+using Slicer.Slicer.PolygonOperations.Triangulation;
+using System;
 using Xunit;
 using Triangle = Slicer.Slicer.PolygonOperations.Triangle;
 
@@ -62,6 +65,25 @@ namespace SlicerTests.Slicer.PolygonOperations
 
             // Assert 
             result.Should().HaveCount(3);
+        }
+        
+        [Fact]
+        public void TriangulateCircleTest()
+        {
+            // Arrange
+            IOffset offset = new OffsetCopy();
+
+            var polys = offset.PolyOffsetRound(new Polygon(CreatePolygon.SquarePoly(10)), 100_000);
+
+            Console.WriteLine(polys[0].Count);
+            
+            ITriangulate delaunayIncremental = new DelaunayIncremental();
+            
+            // Act
+            var result = delaunayIncremental.Triangulate(polys);
+
+            // Assert 
+            result.Should().HaveCount(polys[0].Count - 2);
         }
     }
 }

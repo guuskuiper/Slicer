@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Slicer.Slicer.PolygonOperations
+namespace Slicer.Slicer.PolygonOperations.Triangulation
 {
     public class Vertex
     {
@@ -15,6 +15,8 @@ namespace Slicer.Slicer.PolygonOperations
 
     public class Face
     {
+        public static Face OUTSIDE = null;
+        
         public HalfEdge Outer;
         public List<HalfEdge> Inner = new List<HalfEdge>();
 
@@ -40,9 +42,14 @@ namespace Slicer.Slicer.PolygonOperations
 
     public class HalfEdgeStructure
     {
-        public List<Vertex> Vs;
-        public List<HalfEdge> Es;
-        public List<Face> Fs;
+        private List<Vertex> Vs;
+        private List<HalfEdge> Es;
+        private List<Face> Fs;
+        private Face Outside;
+
+        public IReadOnlyList<Vertex> Vertices => Vs;
+        public IReadOnlyList<Face> Faces => Fs;
+        public IReadOnlyList<HalfEdge> Edges => Es;
 
         public HalfEdgeStructure(IntPoint p0, IntPoint p1, IntPoint p2)
         {
@@ -58,6 +65,7 @@ namespace Slicer.Slicer.PolygonOperations
             HalfEdge e02 = new HalfEdge(v0);
 
             Face f = new Face(e01);
+            Outside = new Face(e10); // Twine of e01
             
             e01.Next = e12;
             e01.Prev = e20;
@@ -77,17 +85,17 @@ namespace Slicer.Slicer.PolygonOperations
             e10.Next = e02;
             e10.Prev = e21;
             e10.Twine = e01;
-            e10.Face = null;
+            e10.Face = Outside;
             
             e21.Next = e10;
             e21.Prev = e02;
             e21.Twine = e12;
-            e21.Face = null;
+            e21.Face = Outside;
             
             e02.Next = e21;
             e02.Prev = e10;
             e02.Twine = e20;
-            e02.Face = null;
+            e02.Face = Outside;
 
             v0.E = e01;
             v1.E = e12;
@@ -216,6 +224,93 @@ namespace Slicer.Slicer.PolygonOperations
             return dp;
         }
 
+
+        public HalfEdge InsertEdge(HalfEdge dPrev, HalfEdge dNext, HalfEdge pPrev, HalfEdge pNext)
+        {
+            HalfEdge dp = new HalfEdge(dNext.P0);
+            HalfEdge pd = new HalfEdge(pNext.P0);
+
+            dp.Twine = pd;
+            pd.Twine = dp;
+
+            dPrev.Next = dp;
+            dNext.Prev = pd;
+
+            pPrev.Next = pd;
+            pNext.Prev = dp;
+
+            dp.Next = pNext;
+            dp.Prev = dPrev;
+
+            pd.Next = dNext;
+            pd.Prev = pPrev;
+
+            return dp;
+        }
+
+        public void RemoveOutside()
+        {
+            var vertices = GetLoop(Outside.Outer).Select(e => e.P0).ToList();
+            
+            foreach (var v in vertices)
+            {
+                RemoveVertex(v);
+            }
+        }
+
+        public void RemoveVertex(Vertex v)
+        {
+            var edges = GetVertexHalfEdges(v).ToList();
+            foreach (var e in edges)
+            {
+                var t = e.Twine;
+                
+                // remove 1 of the 2 faces, not the one that is the outside (null)
+                if (e.Face == Outside)
+                {
+                    Fs.Remove(t.Face);
+                    UpdateFace(t, Outside);
+                }
+                else if (t.Face == Outside)
+                {
+                    Fs.Remove(e.Face);
+                    UpdateFace(e, Outside);
+                }
+                else
+                {
+                    Debug.Assert(e.Face != null);
+                    Fs.Remove(t.Face);
+                    UpdateFace(t, e.Face);
+                }
+                
+                RemoveEdge(e);
+            }
+
+            Vs.Remove(v);
+        }
+        
+        public IEnumerable<HalfEdge> GetLoop(HalfEdge e)
+        {
+            HalfEdge start = e;
+            HalfEdge current = e;
+            do
+            {
+                yield return current;
+                current = current.Next;
+            } while (current != start);
+        }
+
+        public IEnumerable<HalfEdge> GetVertexHalfEdges(Vertex v)
+        {
+            HalfEdge start = v.E;
+            HalfEdge current = v.E;
+            do
+            {
+                yield return current;
+                current = current.Twine.Next;
+            } while (current != start);
+        }
+        
         private void UpdateFace(HalfEdge e, Face f)
         {
             f.Outer = e;
@@ -245,61 +340,6 @@ namespace Slicer.Slicer.PolygonOperations
             }
             
             Es.Remove(e);
-        }
-
-        public HalfEdge InsertEdge(HalfEdge dPrev, HalfEdge dNext, HalfEdge pPrev, HalfEdge pNext)
-        {
-            HalfEdge dp = new HalfEdge(dNext.P0);
-            HalfEdge pd = new HalfEdge(pNext.P0);
-
-            dp.Twine = pd;
-            pd.Twine = dp;
-
-            dPrev.Next = dp;
-            dNext.Prev = pd;
-
-            pPrev.Next = pd;
-            pNext.Prev = dp;
-
-            dp.Next = pNext;
-            dp.Prev = dPrev;
-
-            pd.Next = dNext;
-            pd.Prev = pPrev;
-
-            return dp;
-        }
-
-        public Vertex GetVertex(IntPoint p)
-        {
-            return Vs.SingleOrDefault(v => v.P == p);
-        }
-
-        public HalfEdge GetHalfEdgeBetween(Vertex A, Vertex B)
-        {
-            return GetVertexHalfEdges(A).SingleOrDefault(he => he.Next.P0 == B);
-        }
-
-        public IEnumerable<HalfEdge> GetLoop(HalfEdge e)
-        {
-            HalfEdge start = e;
-            HalfEdge current = e;
-            do
-            {
-                yield return current;
-                current = current.Next;
-            } while (current != start);
-        }
-
-        public IEnumerable<HalfEdge> GetVertexHalfEdges(Vertex v)
-        {
-            HalfEdge start = v.E;
-            HalfEdge current = v.E;
-            do
-            {
-                yield return current;
-                current = current.Twine.Next;
-            } while (current != start);
         }
     }
 }

@@ -44,12 +44,22 @@ namespace Slicer.Slicer.Clipper
 
             return new Polygons(result);
         }
+        
+        public Polygons PolyOffsetRound(Polygon input, double offset)
+        {
+            _clipperOffset.Clear();
+            List<List<IntPoint>> result = new();
+            _clipperOffset.AddPath(input, JoinType.jtRound, EndType.etClosedPolygon);
+            _clipperOffset.Execute(ref result, offset);
 
-        private void AddPolys(Polygons input)
+            return new Polygons(result);
+        }
+
+        private void AddPolys(Polygons input, JoinType jt = JoinType.jtMiter)
         {
             foreach (Polygon poly in input)
             {
-                _clipperOffset.AddPath(poly, JoinType.jtMiter, EndType.etClosedPolygon);
+                _clipperOffset.AddPath(poly, jt, EndType.etClosedPolygon);
             }
         }
     }

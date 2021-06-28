@@ -23,11 +23,11 @@ namespace Slicer.Models
     {
         public string Header { get; set; }
         public UInt32 NumerOfTriangles { get; set; }
-        public List<Triangle> Triangles { get; set; }
+        public List<STLTriangle> Triangles { get; set; }
     }
 
     [Serializable]
-    public class Triangle
+    public class STLTriangle
     {
         public Vector3 Normal { get; set; }
         public Vector3 Vertex1 { get; set; }

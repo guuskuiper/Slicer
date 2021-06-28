@@ -2,7 +2,7 @@
 
 using Slicer.Models;
 
-namespace Slicer.Slicer.PolygonOperations
+namespace Slicer.Slicer.PolygonOperations.Triangulation
 {
     public interface ITriangulate
     {

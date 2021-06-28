@@ -3,7 +3,10 @@
 using ClipperLib;
 using FluentAssertions;
 using Slicer.Models;
+using Slicer.Slicer.Clipper;
 using Slicer.Slicer.PolygonOperations;
+using Slicer.Slicer.PolygonOperations.Triangulation;
+using System;
 using Xunit;
 using Triangle = Slicer.Slicer.PolygonOperations.Triangle;
 
@@ -62,6 +65,67 @@ namespace SlicerTests.Slicer.PolygonOperations
 
             // Assert 
             result.Should().HaveCount(3);
+        }
+        
+        //[Fact]
+        public void TriangulateInsertOnlyTest()
+        {
+            // Arrange
+            Polygons polys = new Polygons()
+            {
+                new Polygon()
+                {
+                    new IntPoint(0, 0), new IntPoint(0, 11), new IntPoint(15, 5), new IntPoint(10, 11), new IntPoint(10, 0),
+                }
+            };
+
+            ITriangulate insertOnly = new InsertOnly();
+            
+            // Act
+            var result = insertOnly.Triangulate(polys);
+
+            // Assert 
+            result.Should().HaveCount(3);
+        }
+        
+        //[Fact]
+        public void TriangulateInsertOnlyTreeTest()
+        {
+            // Arrange
+            Polygons polys = new Polygons()
+            {
+                new Polygon()
+                {
+                    new IntPoint(0, 0), new IntPoint(0, 11), new IntPoint(15, 5), new IntPoint(10, 11), new IntPoint(10, 0),
+                }
+            };
+
+            ITriangulate insertOnlyTree = new InsertOnlyTree();
+            
+            // Act
+            var result = insertOnlyTree.Triangulate(polys);
+
+            // Assert 
+            result.Should().HaveCount(3);
+        }
+        
+        [Fact]
+        public void TriangulateCircleTest()
+        {
+            // Arrange
+            IOffset offset = new OffsetCopy();
+
+            var polys = offset.PolyOffsetRound(new Polygon(CreatePolygon.SquarePoly(10)), 100_000);
+
+            Console.WriteLine(polys[0].Count);
+            
+            ITriangulate delaunayIncremental = new DelaunayIncrementalHalfEdge();
+            
+            // Act
+            var result = delaunayIncremental.Triangulate(polys);
+
+            // Assert 
+            result.Should().HaveCount(polys[0].Count - 2);
         }
     }
 }
