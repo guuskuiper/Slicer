@@ -1,6 +1,29 @@
 # Slicer
 My own slicer implemented using Dependency Injection in .Net 5.
 
+# How to build / run
+Install the .NET 5 SDK: https://dotnet.microsoft.com/download/dotnet/5.0
+
+Build:
+```dotnet build```
+
+Run:
+```dotnet run -p ConsoleSlicerDI -- <options>```
+
+Options:
+```
+  -o, --output      Provide an output file path.
+
+  -i, --input       Provide an STL file path.
+
+  -p, --parallel    Slice in parallel.
+
+  -m, --mediatr     Use mediatR.
+
+  --help            Display this help screen.
+
+  --version         Display version information.
+```
 # Solution structure
 
 ## Benchmark
