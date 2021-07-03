@@ -2,7 +2,7 @@
 My own slicer implemented using Dependency Injection in .Net 5.
 
 # How to build / run
-Install the .NET 5 SDK: https://dotnet.microsoft.com/download/dotnet/5.0
+[Install the .NET 5 SDK](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 Build:
 ```dotnet build```
