@@ -27,7 +27,7 @@ namespace Slicer.Slicer.Sort
             layer.Paths = new Polygons();
             
             IntPoint curPoint = prevPt;
-            foreach (var path in layer.Paths)
+            foreach (var path in paths)
             {
                 layer.Paths.Add(path);
                 curPoint = path[^1];
