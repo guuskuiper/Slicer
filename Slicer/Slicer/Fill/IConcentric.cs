@@ -6,8 +6,8 @@ namespace Slicer.Slicer.Fill
 {
     public interface IConcentric
     {
-        Polygons ConcentricFill(Polygon poly, double lineWidth);
-        Polygons ConcentricFill(Polygons polys, double lineWidth);
-        Polygons ConcentricOutside(Polygons polygons, double lineWidth, int maxPathCount);
+        FillResult ConcentricFill(Polygon poly, double lineWidth, int maxPathCount);
+        FillResult ConcentricFill(Polygons polys, double lineWidth, int maxPathCount);
+        FillResult ConcentricOutside(Polygons polygons, double lineWidth, int maxPathCount);
     }
 }

@@ -10,6 +10,7 @@ using Slicer.Options;
 using Slicer.Services;
 using Slicer.Slicer.Clipper;
 using Slicer.Slicer.Fill;
+using Slicer.Slicer.Fill.Patterns;
 using Slicer.Slicer.Input;
 using Slicer.Slicer.Output;
 using Slicer.Slicer.Slice;
@@ -39,6 +40,9 @@ namespace Slicer
             services.AddTransient<IFileIO, FileIO>();
             services.AddTransient<ILayers, Layers>();
             services.AddTransient<IFiller, Filler>();
+            services.AddTransient<IPatternFiller, PatternFiller>();
+            services.AddTransient<IPatternGenerator, ParallelPatternGenerator>();
+            services.AddSingleton<IPatternFactory, PatternFactory>();
             services.AddTransient<ISort, Sort>();
             services.AddSingleton<Project>();
             services.AddTransient<GcodeState>();
