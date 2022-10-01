@@ -1,8 +1,8 @@
 # Slicer
-My own slicer implemented using Dependency Injection in .Net 5.
+My own slicer implemented using Dependency Injection in .NET 6.
 
 # How to build / run
-[Install the .NET 5 SDK](https://dotnet.microsoft.com/download/dotnet/5.0)
+[Install the .NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
 
 Build:
 ```dotnet build```
