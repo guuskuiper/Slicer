@@ -23,7 +23,7 @@ namespace SlicerTests.Slicer.Clipper
         public void ListIntPointOffset_ShouldAddNegativeOffset()
         {
             // Arrange
-            List<IntPoint> poly = CreatePolygon.SquarePoly(10_000);
+            var poly = CreatePolygon.SquarePoly(10_000);
 
             // Act
             var offsetPolys = _offset.PolyOffset(poly, -1_000);
@@ -106,5 +106,10 @@ namespace SlicerTests.Slicer.Clipper
     public class OffsetTests : AbstractOffsetTest
     {
         public OffsetTests() : base(new Offset(new ClipperOffset())) {}
+    }
+    
+    public class Offset2Tests : AbstractOffsetTest
+    {
+        public Offset2Tests() : base(new Offset2()) {}
     }
 }

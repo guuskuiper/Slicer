@@ -17,22 +17,12 @@ namespace Slicer.Slicer.Clipper
 
         public Polygons PolyOffset(Polygon input, double offset)
         {
-            //_clipperOffset.Clear();
-            List<List<IntPoint>> result = new();
-            _clipperOffset.AddPath(input, JoinType.jtMiter, EndType.etClosedPolygon);
-            _clipperOffset.Execute(ref result, offset);
-
-            return new Polygons(result);
-        }
-
-        public List<List<IntPoint>> PolyOffset(List<IntPoint> input, double offset)
-        {
             _clipperOffset.Clear();
             List<List<IntPoint>> result = new();
             _clipperOffset.AddPath(input, JoinType.jtMiter, EndType.etClosedPolygon);
             _clipperOffset.Execute(ref result, offset);
 
-            return result;
+            return new Polygons(result);
         }
 
         public Polygons PolyOffset(Polygons input, double offset)

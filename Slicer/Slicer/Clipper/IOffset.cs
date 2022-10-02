@@ -10,7 +10,6 @@ namespace Slicer.Slicer.Clipper
     {
         Polygons PolyOffset(Polygon input, double offset);
         Polygons PolyOffsetRound(Polygon input, double offset);
-        List<List<IntPoint>> PolyOffset(List<IntPoint> input, double offset);
         Polygons PolyOffset(Polygons input, double offset);
     }
 }

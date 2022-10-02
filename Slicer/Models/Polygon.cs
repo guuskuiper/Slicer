@@ -18,6 +18,10 @@ namespace Slicer.Models
         public Polygon(params IntPoint[] poly) : base(poly)
         {
         }
+        
+        public Polygon(int capacity) : base(capacity)
+        {
+        }
 
         /* No copy! */
         public Polygon(List<IntPoint> poly)
