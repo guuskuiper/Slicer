@@ -1,7 +1,4 @@
-﻿using ClipperLib;
-using FluentValidation;
-using Serilog;
-using Slicer.Middleware;
+﻿using Serilog;
 using Slicer.Models;
 using Slicer.Options;
 using Slicer.Slicer.Fill;
@@ -10,8 +7,6 @@ using Slicer.Slicer.Output;
 using Slicer.Slicer.Slice;
 using Slicer.Slicer.Sort;
 using Slicer.Utils;
-using Slicer.Validators;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -96,11 +91,11 @@ namespace Slicer.Services
             List<Layer> sortedLayers = new List<Layer>(layers.Capacity);
             if (parallel)
             {
-                sortedLayers.AddRange(_parallelScope.Parallelize<Layer, ISort, Layer>(layers, (layer, sort) => sort.SortPolygons(layer, new IntPoint(0, 0)).Item1));
+                sortedLayers.AddRange(_parallelScope.Parallelize<Layer, ISort, Layer>(layers, (layer, sort) => sort.SortPolygons(layer, new Point2D(0, 0)).Item1));
             }
             else
             {
-                IntPoint curPt = new IntPoint(0, 0);
+                Point2D curPt = new (0, 0);
                 foreach (Layer layer in layers)
                 {
                     var (sortedLayer, lastPt) = _sort.SortPolygons(layer, curPt);

@@ -1,14 +1,13 @@
 ﻿// unset
 
-using ClipperLib;
 using FluentAssertions;
 using Slicer.Models;
 using Slicer.Slicer.Clipper;
+using Slicer.Slicer.Clipper.Clipper1;
 using Slicer.Slicer.PolygonOperations;
 using Slicer.Slicer.PolygonOperations.Triangulation;
 using System;
 using Xunit;
-using Triangle = Slicer.Slicer.PolygonOperations.Triangle;
 
 namespace SlicerTests.Slicer.PolygonOperations
 {
@@ -24,14 +23,14 @@ namespace SlicerTests.Slicer.PolygonOperations
             {
                 new Polygon()
                 {
-                    new IntPoint(0, 0), new IntPoint(0, 11), new IntPoint(10, 11), new IntPoint(10, 0),
+                    new (0, 0), new (0, 11), new (10, 11), new (10, 0),
                 }
             };
 
             Polygons expected = new Polygons()
             {
-                new Polygon() {new IntPoint(10, 11), new IntPoint(0, 11), new IntPoint(10, 0)},
-                new Polygon() {new IntPoint(10, 0), new IntPoint(0, 11), new IntPoint(0, 0),}
+                new Polygon() {new (10, 11), new (0, 11), new (10, 0)},
+                new Polygon() {new (10, 0), new (0, 11), new (0, 0),}
             };
 
             ITriangulate delaunayIncremental = new DelaunayIncremental();
@@ -54,7 +53,7 @@ namespace SlicerTests.Slicer.PolygonOperations
             {
                 new Polygon()
                 {
-                    new IntPoint(0, 0), new IntPoint(0, 11), new IntPoint(15, 5), new IntPoint(10, 11), new IntPoint(10, 0),
+                    new (0, 0), new (0, 11), new (15, 5), new (10, 11), new (10, 0),
                 }
             };
 

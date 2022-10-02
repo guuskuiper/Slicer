@@ -1,12 +1,9 @@
 ﻿// unset
 
-using ClipperLib;
 using FluentAssertions;
 using Slicer.Models;
 using Slicer.Settings;
 using Slicer.Slicer.Fill.Patterns;
-using Slicer.Slicer.PolygonOperations;
-using System.Collections.Generic;
 using Xunit;
 
 namespace SlicerTests.Slicer.Fill
@@ -26,7 +23,7 @@ namespace SlicerTests.Slicer.Fill
                 }
             };
 
-            IntRect bound = new IntRect(-10_000, 10_000, 10_000, -10_000);
+            Rect bound = new (-10_000, 10_000, 10_000, -10_000);
 
             // Act
             var pattern = parallelPatternGenerator.CreatePattern(project, bound);

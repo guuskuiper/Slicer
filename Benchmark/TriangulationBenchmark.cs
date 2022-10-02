@@ -1,11 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
-using ClipperLib;
 using Slicer.Models;
 using Slicer.Slicer.Clipper;
+using Slicer.Slicer.Clipper.Clipper1;
 using Slicer.Slicer.PolygonOperations;
 using Slicer.Slicer.PolygonOperations.Triangulation;
-using System;
-using System.Collections.Generic;
 
 namespace Benchmark
 {

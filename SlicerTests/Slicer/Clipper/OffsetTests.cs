@@ -2,10 +2,10 @@
 using FluentAssertions;
 using Slicer.Models;
 using Slicer.Slicer.Clipper;
+using Slicer.Slicer.Clipper.Clipper1;
+using Slicer.Slicer.Clipper.Clipper2;
 using Slicer.Slicer.PolygonOperations;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using Xunit;
 
 namespace SlicerTests.Slicer.Clipper
@@ -84,8 +84,8 @@ namespace SlicerTests.Slicer.Clipper
         {
             // Arrange
             var polys = new Polygons(
-                CreatePolygon.RectPoly(4_000, 10_000, new IntPoint(-3_000, 0)),
-                CreatePolygon.RectPoly(4_000, 10_000, new IntPoint(+3_000, 0))
+                CreatePolygon.RectPoly(4_000, 10_000, new (-3_000, 0)),
+                CreatePolygon.RectPoly(4_000, 10_000, new (+3_000, 0))
             );
 
             // Act

@@ -1,8 +1,6 @@
 ﻿// unset
 
-using ClipperLib;
-
 namespace Slicer.Models
 {
-    public record Line(IntPoint Pt0, IntPoint Pt1);
+    public record Line(Point2D Pt0, Point2D Pt1);
 }

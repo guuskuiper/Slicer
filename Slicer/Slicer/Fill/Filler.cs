@@ -3,7 +3,6 @@
 using Slicer.Models;
 using Slicer.Slicer.Fill.Patterns;
 using Slicer.Slicer.PolygonOperations;
-using System;
 
 namespace Slicer.Slicer.Fill
 {

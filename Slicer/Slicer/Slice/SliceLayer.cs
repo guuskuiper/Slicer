@@ -1,6 +1,5 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
 using Slicer.Slicer.PolygonOperations;
 using System;
@@ -79,7 +78,7 @@ namespace Slicer.Slicer.Slice
             }
         }
 
-        private bool AlmostEqual(IntPoint pt0, IntPoint pt1, int delta = 1)
+        private bool AlmostEqual(Point2D pt0, Point2D pt1, int delta = 1)
         {
             return (Math.Abs(pt0.X - pt1.X) + Math.Abs(pt0.Y - pt1.Y)) <= delta;
         }

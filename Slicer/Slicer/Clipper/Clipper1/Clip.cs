@@ -4,7 +4,7 @@ using ClipperLib;
 using Slicer.Models;
 using System.Collections.Generic;
 
-namespace Slicer.Slicer.Clipper
+namespace Slicer.Slicer.Clipper.Clipper1
 {
     public class Clip : IClip
     {
@@ -24,7 +24,7 @@ namespace Slicer.Slicer.Clipper
             AddPolys(clipPolygons, PolyType.ptClip, true);
             _clipper.Execute(ClipType.ctDifference, result);
 
-            return new Polygons(result);
+            return Clipper1Converters.ToPolys(result);
         }
 
         public Polygons DifferenceOpen(Polygons polys, Polygons clipPolygons)
@@ -36,7 +36,7 @@ namespace Slicer.Slicer.Clipper
             AddPolys(clipPolygons, PolyType.ptClip, true);
             _clipper.Execute(ClipType.ctDifference, result);
 
-            return new Polygons(ClipperLib.Clipper.OpenPathsFromPolyTree(result));
+            return Clipper1Converters.ToPolys(ClipperLib.Clipper.OpenPathsFromPolyTree(result));
         }
 
         public Polygons Union(Polygons polys, Polygons clipPolygons)
@@ -48,7 +48,7 @@ namespace Slicer.Slicer.Clipper
             AddPolys(clipPolygons, PolyType.ptClip, true);
             _clipper.Execute(ClipType.ctUnion, result);
 
-            return new Polygons(result);
+            return Clipper1Converters.ToPolys(result);
         }
 
         public (Polygons open, Polygons closed) UnionOpen(Polygons polys, Polygons clipPolygons)
@@ -60,8 +60,8 @@ namespace Slicer.Slicer.Clipper
             AddPolys(clipPolygons, PolyType.ptClip, true);
             _clipper.Execute(ClipType.ctUnion, result);
 
-            Polygons open = new Polygons(ClipperLib.Clipper.OpenPathsFromPolyTree(result));
-            Polygons closed = new Polygons(ClipperLib.Clipper.ClosedPathsFromPolyTree(result));
+            Polygons open = Clipper1Converters.ToPolys(ClipperLib.Clipper.OpenPathsFromPolyTree(result));
+            Polygons closed = Clipper1Converters.ToPolys(ClipperLib.Clipper.ClosedPathsFromPolyTree(result));
 
             return (open, closed);
         }
@@ -75,7 +75,7 @@ namespace Slicer.Slicer.Clipper
             AddPolys(clipPolygons, PolyType.ptClip, true);
             _clipper.Execute(ClipType.ctIntersection, result);
 
-            return new Polygons(result);
+            return Clipper1Converters.ToPolys(result);
         }
 
         public Polygons IntersectionOpen(Polygons polys, Polygons clipPolygons)
@@ -87,7 +87,7 @@ namespace Slicer.Slicer.Clipper
             AddPolys(clipPolygons, PolyType.ptClip, true);
             _clipper.Execute(ClipType.ctIntersection, result);
 
-            return new Polygons(ClipperLib.Clipper.OpenPathsFromPolyTree(result));
+            return Clipper1Converters.ToPolys(ClipperLib.Clipper.OpenPathsFromPolyTree(result));
         }
 
         public Polygons Xor(Polygons polys, Polygons clipPolygons, bool polysIsClosed = true)
@@ -99,14 +99,14 @@ namespace Slicer.Slicer.Clipper
             AddPolys(clipPolygons, PolyType.ptClip, true);
             _clipper.Execute(ClipType.ctXor, result);
 
-            return new Polygons(result);
+            return Clipper1Converters.ToPolys(result);
         }
 
         private void AddPolys(Polygons polys, PolyType polyType, bool closed = true)
         {
             foreach (var poly in polys)
             {
-                _clipper.AddPath(poly, polyType, closed);
+                _clipper.AddPath(Clipper1Converters.ToPath(poly), polyType, closed);
             }
         }
     }

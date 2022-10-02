@@ -1,9 +1,8 @@
 ﻿using ClipperLib;
 using Slicer.Models;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Slicer.Slicer.Clipper
+namespace Slicer.Slicer.Clipper.Clipper1
 {
 
     public class Offset : IOffset
@@ -19,10 +18,10 @@ namespace Slicer.Slicer.Clipper
         {
             _clipperOffset.Clear();
             List<List<IntPoint>> result = new();
-            _clipperOffset.AddPath(input, JoinType.jtMiter, EndType.etClosedPolygon);
+            _clipperOffset.AddPath(Clipper1Converters.ToPath(input), JoinType.jtMiter, EndType.etClosedPolygon);
             _clipperOffset.Execute(ref result, offset);
 
-            return new Polygons(result);
+            return Clipper1Converters.ToPolys(result);
         }
 
         public Polygons PolyOffset(Polygons input, double offset)
@@ -32,24 +31,24 @@ namespace Slicer.Slicer.Clipper
             AddPolys(input);
             _clipperOffset.Execute(ref result, offset);
 
-            return new Polygons(result);
+            return Clipper1Converters.ToPolys(result);
         }
         
         public Polygons PolyOffsetRound(Polygon input, double offset)
         {
             _clipperOffset.Clear();
             List<List<IntPoint>> result = new();
-            _clipperOffset.AddPath(input, JoinType.jtRound, EndType.etClosedPolygon);
+            _clipperOffset.AddPath(Clipper1Converters.ToPath(input), JoinType.jtRound, EndType.etClosedPolygon);
             _clipperOffset.Execute(ref result, offset);
 
-            return new Polygons(result);
+            return Clipper1Converters.ToPolys(result);
         }
 
         private void AddPolys(Polygons input, JoinType jt = JoinType.jtMiter)
         {
             foreach (Polygon poly in input)
             {
-                _clipperOffset.AddPath(poly, jt, EndType.etClosedPolygon);
+                _clipperOffset.AddPath(Clipper1Converters.ToPath(poly), jt, EndType.etClosedPolygon);
             }
         }
     }

@@ -1,12 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Serilog.Core;
 using Slicer;
 using Slicer.Models;
-using Slicer.Settings;
 using Slicer.Slicer.Input;
 using Slicer.Slicer.Slice;
 using Slicer.Utils;

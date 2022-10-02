@@ -1,10 +1,8 @@
 ﻿using Clipper2Lib;
-using ClipperLib;
 using Slicer.Models;
-using System;
 using ClipType = Clipper2Lib.ClipType;
 
-namespace Slicer.Slicer.Clipper;
+namespace Slicer.Slicer.Clipper.Clipper2;
 
 public class Clip2 : IClip
 {
@@ -17,7 +15,7 @@ public class Clip2 : IClip
         AddPolys(clipPolygons, true, true);
         _clipper.Execute(ClipType.Difference, FillRule.EvenOdd, solution);
 
-        return ToPolys(solution);
+        return Clipper2Converters.ToPolys(solution);
     }
 
     public Polygons DifferenceOpen(Polygons polys, Polygons clipPolygons)
@@ -29,7 +27,7 @@ public class Clip2 : IClip
         AddPolys(clipPolygons, true, true);
         _clipper.Execute(ClipType.Difference, FillRule.EvenOdd, solution, solutionOpen);
 
-        return ToPolys(solutionOpen);
+        return Clipper2Converters.ToPolys(solutionOpen);
     }
 
     public Polygons Union(Polygons polys, Polygons clipPolygons)
@@ -40,7 +38,7 @@ public class Clip2 : IClip
         AddPolys(clipPolygons, true, true);
         _clipper.Execute(ClipType.Union, FillRule.EvenOdd, solution);
 
-        return ToPolys(TrimColinear(solution));
+        return Clipper2Converters.ToPolys(TrimColinear(solution));
     }
 
     public (Polygons open, Polygons closed) UnionOpen(Polygons polys, Polygons clipPolygons)
@@ -52,7 +50,7 @@ public class Clip2 : IClip
         AddPolys(clipPolygons, true, true);
         _clipper.Execute(ClipType.Union, FillRule.EvenOdd, solution, solutionOpen);
 
-        return (ToPolys(solutionOpen), ToPolys(solution));
+        return (Clipper2Converters.ToPolys(solutionOpen), Clipper2Converters.ToPolys(solution));
     }
 
     public Polygons Intersection(Polygons polys, Polygons clipPolygons)
@@ -63,7 +61,7 @@ public class Clip2 : IClip
         AddPolys(clipPolygons, true, true);
         _clipper.Execute(ClipType.Intersection, FillRule.EvenOdd, solution);
         
-        return ToPolys(solution);
+        return Clipper2Converters.ToPolys(solution);
     }
 
     public Polygons IntersectionOpen(Polygons polys, Polygons clipPolygons)
@@ -75,7 +73,7 @@ public class Clip2 : IClip
         AddPolys(clipPolygons, true, true);
         _clipper.Execute(ClipType.Intersection, FillRule.EvenOdd, solution, solutionOpen);
 
-        return ToPolys(solutionOpen);
+        return Clipper2Converters.ToPolys(solutionOpen);
     }
 
     public Polygons Xor(Polygons polys, Polygons clipPolygons, bool polysIsClosed = true)
@@ -86,7 +84,7 @@ public class Clip2 : IClip
         AddPolys(clipPolygons, true, true);
         _clipper.Execute(ClipType.Xor, FillRule.EvenOdd, solution);
 
-        return ToPolys(solution);
+        return Clipper2Converters.ToPolys(solution);
     }
     
     
@@ -112,36 +110,14 @@ public class Clip2 : IClip
     private Path64 ToPath(Polygon poly)
     {
         Path64 path = new(poly.Count);
-        foreach (IntPoint point in poly)
+        foreach (var point in poly)
         {
             path.Add(new Point64(point.X, point.Y));
         }
 
         return path;
     }
-
-    private Polygon ToPoly(Path64 path)
-    {
-        Polygon poly = new(path.Count);
-        foreach (Point64 point in path)
-        {
-            poly.Add(new IntPoint(point.X, point.Y));
-        }
-
-        return poly;
-    }
-
-    private Polygons ToPolys(Paths64 paths)
-    {
-        Polygons polys = new Polygons(paths.Count);
-        foreach (Path64 path in paths)
-        {
-            polys.Add(ToPoly(path));
-        }
-
-        return polys;
-    }
-
+    
     private Paths64 TrimColinear(Paths64 input)
     {
         Paths64 paths = new Paths64(input.Count);

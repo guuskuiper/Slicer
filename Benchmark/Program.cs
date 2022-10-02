@@ -1,8 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using ClipperLib;
-using Slicer.Slicer.Clipper;
-using System.Collections.Generic;
+﻿using BenchmarkDotNet.Running;
 
 namespace Benchmark
 {

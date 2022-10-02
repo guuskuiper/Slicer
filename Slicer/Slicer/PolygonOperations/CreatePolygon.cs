@@ -1,23 +1,21 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
 using System;
-using System.Collections.Generic;
 
 namespace Slicer.Slicer.PolygonOperations
 {
     public static class CreatePolygon
     {
-        private static readonly IntPoint Origin = new IntPoint(0, 0);
+        private static readonly Point2D Origin = new (0, 0);
 
         public static Polygon SquarePoly(long size) => SquarePoly(size, Origin);
 
-        public static Polygon SquarePoly(long size, IntPoint center) => RectPoly(size, size, center);
+        public static Polygon SquarePoly(long size, Point2D center) => RectPoly(size, size, center);
 
         public static Polygon RectPoly(long width, long height) => RectPoly(width, height, Origin);
 
-        public static Polygon RectPoly(long width, long height, IntPoint center)
+        public static Polygon RectPoly(long width, long height, Point2D center)
         {
             var poly = new Polygon
             {
@@ -29,7 +27,7 @@ namespace Slicer.Slicer.PolygonOperations
             return poly;
         }
         
-        public static Polygon CreateCircle(IntPoint center, double radius, int segments = 50, double startAngle = 0.0f)
+        public static Polygon CreateCircle(Point2D center, double radius, int segments = 50, double startAngle = 0.0f)
         {
             Polygon polygon = new Polygon(segments+1);
 
@@ -39,7 +37,7 @@ namespace Slicer.Slicer.PolygonOperations
                 double x = Math.Cos(a) * radius;
                 double y = Math.Sin(a) * radius;
 
-                polygon.Add(new IntPoint(center.X + x, center.Y + y));
+                polygon.Add(new (center.X + x, center.Y + y));
             }
 
             if (polygon.Count > 0) polygon.Add(polygon[0]);

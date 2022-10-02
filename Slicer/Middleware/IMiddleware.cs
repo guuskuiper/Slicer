@@ -1,7 +1,5 @@
 ﻿// unset
 
-using Slicer.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace Slicer.Middleware

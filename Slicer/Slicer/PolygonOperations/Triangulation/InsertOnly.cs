@@ -1,8 +1,6 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,7 +10,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
     public class InsertOnly : ITriangulate
     {
         private HalfEdgeStructure _halfEdgeStructure;
-        private IntRect _boundsOffset;
+        private Rect _boundsOffset;
         
         public Polygons Triangulate(Polygons polygons)
         {
@@ -22,7 +20,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             foreach (Polygon polygon in polygons)
             {
                 System.Random random = new System.Random(42);
-                foreach (IntPoint point in polygon.OrderBy(r => random.Next()))
+                foreach (var point in polygon.OrderBy(r => random.Next()))
                 {
                     InsertPoint(point);
                 }
@@ -37,17 +35,17 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             long minX = polygons.Min(x => x.Min(xx => xx.X));
             long maxY = polygons.Max(y => y.Max(yy => yy.Y));
             long minY = polygons.Min(y => y.Min(yy => yy.Y));
-            IntRect bounds = new IntRect(minX, maxY, maxX, minY);
-            _boundsOffset = new IntRect(bounds.left - 1, bounds.top + 1, bounds.right + 1, bounds.bottom - 1);
+            Rect bounds = new (minX, maxY, maxX, minY);
+            _boundsOffset = new (bounds.left - 1, bounds.top + 1, bounds.right + 1, bounds.bottom - 1);
         }
 
         private void InitializeBaseTriangle()
         {
             long height = _boundsOffset.top - _boundsOffset.bottom;
             long width = _boundsOffset.right - _boundsOffset.left;
-            IntPoint A = new IntPoint(_boundsOffset.left, _boundsOffset.bottom - 10 * height);
-            IntPoint B = new IntPoint(_boundsOffset.left, _boundsOffset.top);
-            IntPoint C = new IntPoint(_boundsOffset.right + 10 * width, _boundsOffset.top);
+            Point2D A = new (_boundsOffset.left, _boundsOffset.bottom - 10 * height);
+            Point2D B = new (_boundsOffset.left, _boundsOffset.top);
+            Point2D C = new (_boundsOffset.right + 10 * width, _boundsOffset.top);
             
             _halfEdgeStructure = new HalfEdgeStructure(A, B, C);
         }
@@ -58,7 +56,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             return _halfEdgeStructure.Faces.Select(f => new Polygon(f.Outer.P0.P, f.Outer.Next.P0.P, f.Outer.Prev.P0.P));
         }
 
-        private void InsertPoint(IntPoint pt)
+        private void InsertPoint(Point2D pt)
         {
             // TODO: very slow
             foreach (Face face in _halfEdgeStructure.Faces)
@@ -89,7 +87,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             Debug.Fail("Point not in a triangle");
         }
         
-        private void InsertTriangle(IntPoint pt, HalfEdge he)
+        private void InsertTriangle(Point2D pt, HalfEdge he)
         {
             _ = _halfEdgeStructure.InsertInside(he, pt);
         }

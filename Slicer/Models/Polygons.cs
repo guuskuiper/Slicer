@@ -1,6 +1,4 @@
-﻿using ClipperLib;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -24,17 +22,17 @@ namespace Slicer.Models
         {
         }
 
-        public Polygons(IEnumerable<IEnumerable<IntPoint>> polys)
+        public Polygons(IEnumerable<IEnumerable<Point2D>> polys)
         {
             this.AddRange(polys.Select(x => new Polygon(x)));
         }
 
-        public Polygons(List<List<IntPoint>> polys) : base(polys.Count)
+        public Polygons(List<List<Point2D>> polys) : base(polys.Count)
         {
             this.AddRange(polys.Select(x => new Polygon(x)));
         }
 
-        public List<List<IntPoint>> GetPolysCopy()
+        public List<List<Point2D>> GetPolysCopy()
         {
             return this.Select(x => x.ToList()).ToList();
         }

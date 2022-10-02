@@ -1,9 +1,7 @@
 ﻿// unset
 
-using ClipperLib;
 using FluentAssertions;
 using Slicer.Models;
-using Slicer.Slicer.Clipper;
 using Slicer.Slicer.Fill;
 using Slicer.Slicer.Fill.Patterns;
 using Slicer.Slicer.PolygonOperations;
@@ -35,15 +33,15 @@ namespace SlicerTests.Slicer.Fill
             var patternArea = new Polygons(CreatePolygon.SquarePoly(9_000));
 
             var pattern = new ParallelPatternGenerator().CreatePattern(_project, Bounds.GetBounds(patternArea));
-            _patternFactory.CreatePattern(_project, Arg.Any<IntRect>()).Returns(pattern);
+            _patternFactory.CreatePattern(_project, Arg.Any<Rect>()).Returns(pattern);
 
             var concentricPaths = new Polygons(CreatePolygon.SquarePoly(9_500));
             var fillResult = new FillResult(concentricPaths, patternArea);
             _concentric.ConcentricFill(Arg.Any<Polygons>(), Arg.Any<double>(), 1).Returns(fillResult);
 
             var lines = new Polygons(
-                new Polygon() {new IntPoint(8_500, -9_000), new IntPoint(8_500, 9_000)},
-                new Polygon() {new IntPoint(7_500, -9_000), new IntPoint(7_500, 9_000)}
+                new Polygon() {new (8_500, -9_000), new (8_500, 9_000)},
+                new Polygon() {new (7_500, -9_000), new (7_500, 9_000)}
                 );
 
             _patternFiller.Fill(Arg.Any<Polygons>(), pattern).Returns(lines);

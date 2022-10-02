@@ -1,7 +1,7 @@
-﻿using ClipperLib;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slicer.Models;
 using Slicer.Slicer.Clipper;
+using Slicer.Slicer.Clipper.Clipper1;
 using Slicer.Slicer.Fill;
 using Slicer.Slicer.PolygonOperations;
 using System;
@@ -21,7 +21,7 @@ namespace SlicerTests.Slicer.Fill
 
             var contour = CreatePolygon.SquarePoly(10_000);
 
-            var expectedPaths = new List<List<IntPoint>>
+            var expectedPaths = new List<List<Point2D>>
             {
                 CreatePolygon.SquarePoly(9_000),
                 CreatePolygon.SquarePoly(7_000),
@@ -53,12 +53,12 @@ namespace SlicerTests.Slicer.Fill
 
             var contour = CreatePolygon.SquarePoly(10_000);
 
-            var expectedPaths = new List<List<IntPoint>>
+            var expectedPaths = new List<List<Point2D>>
             {
                 CreatePolygon.SquarePoly(9_000),
             };
             
-            var expectedRemaining = new List<List<IntPoint>>
+            var expectedRemaining = new List<List<Point2D>>
             {
                 CreatePolygon.SquarePoly(8_000),
             };
@@ -86,7 +86,7 @@ namespace SlicerTests.Slicer.Fill
 
             var contour = CreatePolygon.SquarePoly(10_000);
 
-            var expectedPaths = new List<List<IntPoint>>
+            var expectedPaths = new List<List<Point2D>>
             {
                 CreatePolygon.SquarePoly(11_000),
                 CreatePolygon.SquarePoly(13_000),

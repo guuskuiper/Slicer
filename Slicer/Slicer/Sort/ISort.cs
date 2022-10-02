@@ -1,13 +1,12 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
 
 namespace Slicer.Slicer.Sort
 {
     public interface ISort
     {
-        (Layer, IntPoint) SortPolygons(Layer layer, IntPoint prevPt);
-        IntPoint SortPolygonsInplace(Layer layer, IntPoint prevPt);
+        (Layer, Point2D) SortPolygons(Layer layer, Point2D prevPt);
+        Point2D SortPolygonsInplace(Layer layer, Point2D prevPt);
     }
 }

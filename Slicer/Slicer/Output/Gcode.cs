@@ -1,6 +1,5 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
 using System;
 using System.Collections.Generic;
@@ -48,13 +47,13 @@ namespace Slicer.Slicer.Output
             _sb.AppendLine(_gcodeCommands.TravelZ(z, speed));
         }
 
-        private void TravelXY(IntPoint pt, double speed)
+        private void TravelXY(Point2D pt, double speed)
         {
             _sb.AppendLine(_gcodeCommands.TravelXY(pt, speed));
             _state.Pt = pt;
         }
 
-        private void Extruder(IntPoint pt, double volume, double speed)
+        private void Extruder(Point2D pt, double volume, double speed)
         {
             _state.E += volume;
             _sb.AppendLine(_gcodeCommands.Extrude(pt, _state.E, speed));
@@ -65,14 +64,14 @@ namespace Slicer.Slicer.Output
         {
             if(path.Count == 0) return;
 
-            IntPoint nextPt = path[0];
+            var nextPt = path[0];
 
             if (_state.Pt != nextPt)
             {
                 TravelXY(nextPt, _project.Settings.TravelSpeed);
             }
 
-            foreach (IntPoint pt in path.Skip(1))
+            foreach (var pt in path.Skip(1))
             {
                 var e = CalcVolume(_state.Pt, pt, thickness, _project.Settings.LineWidth / 1000.0);
 
@@ -81,7 +80,7 @@ namespace Slicer.Slicer.Output
         }
 
         // in mm^3
-        private double CalcVolume(IntPoint from, IntPoint to, double thickness, double width)
+        private double CalcVolume(Point2D from, Point2D to, double thickness, double width)
         {
             double dx = (to.X - from.X);
             double dy = (to.Y - from.Y);

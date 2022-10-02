@@ -1,6 +1,5 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
 
 namespace Slicer.Slicer.Fill.Patterns
@@ -10,7 +9,7 @@ namespace Slicer.Slicer.Fill.Patterns
         public const string Name = "Parallel";
         public string PatternName => Name;
         
-        public IPattern CreatePattern(Project project, IntRect boundingBox)
+        public IPattern CreatePattern(Project project, Rect boundingBox)
         {
             var polygons = new Polygons();
             var lineWidth = project.Settings.LineWidth;
@@ -20,8 +19,8 @@ namespace Slicer.Slicer.Fill.Patterns
             while (currentX < boundingBox.right)
             {
                 var polygon = new Polygon(
-                    new IntPoint(currentX, boundingBox.bottom),
-                    new IntPoint(currentX, boundingBox.top)
+                    new (currentX, boundingBox.bottom),
+                    new (currentX, boundingBox.top)
                 );
                 polygons.Add(polygon);
 

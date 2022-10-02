@@ -1,7 +1,7 @@
 ﻿// unset
 
-using ClipperLib;
 using FluentAssertions;
+using Slicer.Models;
 using Slicer.Slicer.PolygonOperations;
 using Xunit;
 
@@ -27,11 +27,11 @@ namespace SlicerTests.Slicer.PolygonOperations
                 public void IsPointInOutRegionTest(long x, long y, bool inRegion)
                 {
                     // Arrange
-                    IntPoint A = new IntPoint(0, 0);
-                    IntPoint B = new IntPoint(10, 0);
-                    IntPoint C = new IntPoint(0, 10);
+                    Point2D A = new (0, 0);
+                    Point2D B = new (10, 0);
+                    Point2D C = new (0, 10);
         
-                    IntPoint pt = new IntPoint(x, y);
+                    Point2D pt = new (x, y);
                     
                     // Act
                     bool ccw = PolyMath.IsCCW(A, B, C);
@@ -53,12 +53,12 @@ namespace SlicerTests.Slicer.PolygonOperations
                 public void IsPointInCircle(long x, long y, bool inRegion)
                 {
                     // Arrange
-                    IntPoint A = new IntPoint(0, 0);
-                    IntPoint B = new IntPoint(10, 0);
-                    IntPoint C = new IntPoint(0, 10);
+                    Point2D A = new (0, 0);
+                    Point2D B = new (10, 0);
+                    Point2D C = new (0, 10);
                     Triangle t = new Triangle(A, B, C);
         
-                    IntPoint pt = new IntPoint(x, y);
+                    Point2D pt = new (x, y);
                         
                     // Act
                     bool inOutRegion = PolyMath.PointInCircle(pt, t);
@@ -71,9 +71,9 @@ namespace SlicerTests.Slicer.PolygonOperations
                 public void IsCCW()
                 {
                     // Arrange
-                    IntPoint A = new IntPoint(0, 0);
-                    IntPoint B = new IntPoint(10, 0);
-                    IntPoint C = new IntPoint(0, 10);
+                    Point2D A = new (0, 0);
+                    Point2D B = new (10, 0);
+                    Point2D C = new (0, 10);
                         
                     // Act
                     bool ccw = PolyMath.IsCCW(A, B, C);
@@ -86,9 +86,9 @@ namespace SlicerTests.Slicer.PolygonOperations
                 public void IsCCW2()
                 {
                     // Arrange
-                    IntPoint A = new IntPoint(0, 0);
-                    IntPoint B = new IntPoint(10, 0);
-                    IntPoint C = new IntPoint(0, 10);
+                    Point2D A = new (0, 0);
+                    Point2D B = new (10, 0);
+                    Point2D C = new (0, 10);
                         
                     // Act
                     bool ccw = PolyMath.IsCCW(C, A, B);
@@ -101,9 +101,9 @@ namespace SlicerTests.Slicer.PolygonOperations
                 public void IsCW()
                 {
                     // Arrange
-                    IntPoint A = new IntPoint(0, 0);
-                    IntPoint B = new IntPoint(10, 0);
-                    IntPoint C = new IntPoint(0, 10);
+                    Point2D A = new (0, 0);
+                    Point2D B = new (10, 0);
+                    Point2D C = new (0, 10);
                         
                     // Act
                     bool ccw = PolyMath.IsCCW(B, A, C);
@@ -116,9 +116,9 @@ namespace SlicerTests.Slicer.PolygonOperations
                 public void IsCW2()
                 {
                     // Arrange
-                    IntPoint A = new IntPoint(0, 0);
-                    IntPoint B = new IntPoint(10, 0);
-                    IntPoint C = new IntPoint(0, 10);
+                    Point2D A = new (0, 0);
+                    Point2D B = new (10, 0);
+                    Point2D C = new (0, 10);
                         
                     // Act
                     bool ccw = PolyMath.IsCCW(C, B, A);

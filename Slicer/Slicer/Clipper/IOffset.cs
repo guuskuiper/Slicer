@@ -1,8 +1,6 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
-using System.Collections.Generic;
 
 namespace Slicer.Slicer.Clipper
 {

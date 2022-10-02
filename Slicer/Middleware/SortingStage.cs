@@ -1,12 +1,9 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
 using Slicer.Slicer.Sort;
 using Slicer.Utils;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Slicer.Middleware
@@ -38,11 +35,11 @@ namespace Slicer.Middleware
         {
             if (parallel)
             {
-                _parallelScope.Parallelize<Layer, ISort>(layers, (layer, sort) => sort.SortPolygonsInplace(layer, new IntPoint(0, 0)));
+                _parallelScope.Parallelize<Layer, ISort>(layers, (layer, sort) => sort.SortPolygonsInplace(layer, new Point2D(0, 0)));
             }
             else
             {
-                IntPoint curPt = new IntPoint(0, 0);
+                Point2D curPt = new (0, 0);
                 foreach (Layer layer in layers)
                 {
                     var lastPt = _sort.SortPolygonsInplace(layer, curPt);

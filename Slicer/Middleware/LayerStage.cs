@@ -1,7 +1,6 @@
 ﻿// unset
 
 using Slicer.Slicer.Slice;
-using System;
 using System.Threading.Tasks;
 
 namespace Slicer.Middleware

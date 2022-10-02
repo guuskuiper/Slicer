@@ -1,6 +1,5 @@
 ﻿// unset
 
-using ClipperLib;
 using Slicer.Models;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -17,7 +16,7 @@ namespace Slicer.Slicer.Fill.Patterns
             _patternGenerators = patternGenerators.ToImmutableDictionary(x => x.PatternName, x => x);
         }
 
-        public IPattern CreatePattern(Project project, IntRect boundingBox)
+        public IPattern CreatePattern(Project project, Rect boundingBox)
         {
             var patternGenerator = _patternGenerators[project.Settings.PatternName] ?? _patternGenerators.Values.First();
 

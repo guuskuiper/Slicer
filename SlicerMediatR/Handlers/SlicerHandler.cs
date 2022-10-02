@@ -1,7 +1,6 @@
 ﻿// unset
 
 using MediatR;
-using Slicer;
 using Slicer.Services;
 using SlicerMediatR.Commands;
 using System.Threading;

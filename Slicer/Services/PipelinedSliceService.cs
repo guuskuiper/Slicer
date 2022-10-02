@@ -4,7 +4,6 @@ using Serilog;
 using Slicer.Middleware;
 using Slicer.Models;
 using Slicer.Options;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

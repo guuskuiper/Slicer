@@ -1,6 +1,6 @@
 ﻿// unset
 
-using ClipperLib;
+using Slicer.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
 {
     public class Vertex
     {
-        public IntPoint P; // make generic? for IntPoint
+        public Point2D P; // make generic? for IntPoint
         public HalfEdge E; // halfEdge that starts at this vertex
     }
 
@@ -51,7 +51,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
         public IReadOnlyList<Face> Faces => Fs;
         public IReadOnlyList<HalfEdge> Edges => Es;
 
-        public HalfEdgeStructure(IntPoint p0, IntPoint p1, IntPoint p2)
+        public HalfEdgeStructure(Point2D p0, Point2D p1, Point2D p2)
         {
             Vertex v0 = new Vertex() {P = p0};
             Vertex v1 = new Vertex() {P = p1};
@@ -106,7 +106,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             Es = new List<HalfEdge> { e01, e10, e12, e21, e20, e02 };
         }
 
-        public void InsertOutside(HalfEdge h, IntPoint p)
+        public void InsertOutside(HalfEdge h, Point2D p)
         {
             Vertex v2 = new Vertex() {P = p};
             
@@ -149,7 +149,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
         }
         
         // p should be in the loop created from h
-        public Vertex InsertInside(HalfEdge h, IntPoint p)
+        public Vertex InsertInside(HalfEdge h, Point2D p)
         {
             Vertex v = new Vertex() {P = p};
 

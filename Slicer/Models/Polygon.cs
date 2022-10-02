@@ -1,21 +1,19 @@
-﻿using ClipperLib;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Slicer.Models
 {
-    public class Polygon : List<IntPoint>
+    public class Polygon : List<Point2D>
     {
         public Polygon()
         {
         }
 
-        public Polygon(IEnumerable<IntPoint> poly) : base(poly)
+        public Polygon(IEnumerable<Point2D> poly) : base(poly)
         {
         }
 
-        public Polygon(params IntPoint[] poly) : base(poly)
+        public Polygon(params Point2D[] poly) : base(poly)
         {
         }
         
@@ -24,7 +22,7 @@ namespace Slicer.Models
         }
 
         /* No copy! */
-        public Polygon(List<IntPoint> poly)
+        public Polygon(List<Point2D> poly)
         {
             AddRange(poly);
         }

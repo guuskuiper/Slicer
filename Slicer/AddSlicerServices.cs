@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Slicer.Middleware;
 using Slicer.Models;
-using Slicer.Options;
 using Slicer.Services;
 using Slicer.Slicer.Clipper;
+using Slicer.Slicer.Clipper.Clipper1;
 using Slicer.Slicer.Fill;
 using Slicer.Slicer.Fill.Patterns;
 using Slicer.Slicer.Input;
@@ -17,7 +17,6 @@ using Slicer.Slicer.Slice;
 using Slicer.Slicer.Sort;
 using Slicer.Utils;
 using Slicer.Validators;
-using System;
 
 namespace Slicer
 {

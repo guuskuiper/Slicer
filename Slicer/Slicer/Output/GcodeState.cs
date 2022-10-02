@@ -1,12 +1,12 @@
 ﻿// unset
 
-using ClipperLib;
+using Slicer.Models;
 
 namespace Slicer.Slicer.Output
 {
     public class GcodeState
     {
-        public IntPoint Pt { get; set; }
+        public Point2D Pt { get; set; }
         public double E { get; set; }
     }
 }

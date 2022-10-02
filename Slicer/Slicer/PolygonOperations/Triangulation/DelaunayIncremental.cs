@@ -1,5 +1,4 @@
-﻿using ClipperLib;
-using Slicer.Models;
+﻿using Slicer.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,9 +8,9 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
     public class DelaunayIncremental : ITriangulate
     {
         private List<Triangle> _triangles;
-        private IntRect _boundsOffset;
-        private HashSet<IntPoint> _exterior;
-        private Dictionary<IntPoint, Vertex> _mapping;
+        private Rect _boundsOffset;
+        private HashSet<Point2D> _exterior;
+        private Dictionary<Point2D, Vertex> _mapping;
         private Triangle _base;
         
         /*
@@ -21,19 +20,19 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
         public Polygons Triangulate(Polygons polygons)
         {
             
-            _exterior = new HashSet<IntPoint>();
-            _mapping = new Dictionary<IntPoint, Vertex>();
+            _exterior = new HashSet<Point2D>();
+            _mapping = new Dictionary<Point2D, Vertex>();
 
             long maxX = polygons.Max(x => x.Max(xx => xx.X));
             long minX = polygons.Min(x => x.Min(xx => xx.X));
             long maxY = polygons.Max(y => y.Max(yy => yy.Y));
             long minY = polygons.Min(y => y.Min(yy => yy.Y));
-            IntRect bounds = new IntRect(minX, maxY, maxX, minY);
+            Rect bounds = new (minX, maxY, maxX, minY);
             //IntRect bounds = ClipperBase.GetBounds(polygons.GetPolysCopy());
-            _boundsOffset = new IntRect(bounds.left - 1, bounds.top + 1,bounds.right + 1, bounds.bottom - 1);
+            _boundsOffset = new (bounds.left - 1, bounds.top + 1,bounds.right + 1, bounds.bottom - 1);
             foreach (Polygon polygon in polygons)
             {
-                foreach (IntPoint point in polygon)
+                foreach (var point in polygon)
                 {
                     _exterior.Add(point);
                 }
@@ -44,7 +43,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             foreach (Polygon polygon in polygons)
             {
                 System.Random random = new System.Random(42);
-                foreach (IntPoint point in polygon.OrderBy(r => random.Next()))
+                foreach (var point in polygon.OrderBy(r => random.Next()))
                 {
                     InsertPoint(point);
                 }
@@ -62,9 +61,9 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
         {
             long height = _boundsOffset.top - _boundsOffset.bottom;
             long width = _boundsOffset.right - _boundsOffset.left;
-            IntPoint A = new IntPoint(_boundsOffset.left, _boundsOffset.bottom - 10 * height);
-            IntPoint B = new IntPoint(_boundsOffset.left, _boundsOffset.top);
-            IntPoint C = new IntPoint(_boundsOffset.right + 10 * width, _boundsOffset.top);
+            Point2D A = new (_boundsOffset.left, _boundsOffset.bottom - 10 * height);
+            Point2D B = new (_boundsOffset.left, _boundsOffset.top);
+            Point2D C = new (_boundsOffset.right + 10 * width, _boundsOffset.top);
             _base = new Triangle(A, B, C);
             _triangles = new List<Triangle> {_base};
         }
@@ -98,7 +97,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             return isBound;
         }
 
-        private void InsertPoint(IntPoint pt)
+        private void InsertPoint(Point2D pt)
         {
             foreach (Triangle triangle in _triangles)
             {
@@ -127,7 +126,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             Debug.Fail("Point not in a triangle");
         }
 
-        private void InsertTriangle(IntPoint pt, Triangle t)
+        private void InsertTriangle(Point2D pt, Triangle t)
         {
             // insert pa, pb, pc
             _triangles.Add(new Triangle(t.P0, t.P1, pt));
@@ -140,12 +139,12 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             SwapTest(t.P2, t.P0, pt);
         }
 
-        private void SwapTest(IntPoint a, IntPoint b, IntPoint p)
+        private void SwapTest(Point2D a, Point2D b, Point2D p)
         {
             if(_base.Contains(a) && _base.Contains(b)) return;
             if(_exterior.Contains(a) && _exterior.Contains(b)) return;  // TODO check if 2 point are connected in original polygon
 
-            IntPoint d = FindOpposite(a, b, p);
+            Point2D d = FindOpposite(a, b, p);
 
             if (PolyMath.PointInCircle(d, new Triangle(b, p, a)))
             {
@@ -155,7 +154,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
             }
         }
 
-        private void FlipEdge(IntPoint a, IntPoint b, IntPoint p, IntPoint d)
+        private void FlipEdge(Point2D a, Point2D b, Point2D p, Point2D d)
         {
             //var matches = _triangles.Where(t => t.Contains(a) && t.Contains(b));
             var count = _triangles.RemoveAll(t => t.Contains(a) && t.Contains(b));
@@ -166,7 +165,7 @@ namespace Slicer.Slicer.PolygonOperations.Triangulation
         }
 
         // using half-edge structure this will become very fast halfedge->twine->next->next.P0
-        private IntPoint FindOpposite(IntPoint p0, IntPoint p1, IntPoint original)
+        private Point2D FindOpposite(Point2D p0, Point2D p1, Point2D original)
         {
             Triangle match = _triangles.SingleOrDefault(t => t.Contains(p0) && t.Contains(p1) && !t.Contains(original));
             return match.GetOther(p0, p1);

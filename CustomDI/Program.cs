@@ -4,7 +4,6 @@ using Serilog;
 using Slicer;
 using Slicer.Options;
 using Slicer.Services;
-using Slicer.Slicer.Slice;
 using System;
 using System.Threading.Tasks;
 

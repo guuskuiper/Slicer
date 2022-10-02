@@ -1,8 +1,6 @@
-﻿using ClipperLib;
-using Slicer.Models;
+﻿using Slicer.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Slicer.Slicer.PolygonOperations
 {
@@ -11,8 +9,8 @@ namespace Slicer.Slicer.PolygonOperations
 
     public static class Simplify
     {
-        private static double GetX(IntPoint pt) => pt.X;
-        private static double GetY(IntPoint pt) => pt.Y;
+        private static double GetX(Point2D pt) => pt.X;
+        private static double GetY(Point2D pt) => pt.Y;
 
         /// <summary>
         /// Reduce the number of points in "poly".
@@ -24,7 +22,7 @@ namespace Slicer.Slicer.PolygonOperations
         /// <returns></returns>
         public static Polygon Reduce(Polygon poly, long epsilon_um, bool useStack = true, bool usePreprocessing = false)
         {
-            return new Polygon(DouglasPeucker<IntPoint>.Reduce(poly.AsReadOnly(), epsilon_um, GetX, GetY, useStack, usePreprocessing));
+            return new Polygon(DouglasPeucker<Point2D>.Reduce(poly.AsReadOnly(), epsilon_um, GetX, GetY, useStack, usePreprocessing));
         }
 
         /// <summary>
